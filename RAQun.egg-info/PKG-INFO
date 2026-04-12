@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: RAQun
+Version: 0.1.0
+Summary: RAQun is a Python package for comparing ML algorithms
+Author-email: Jose Armando Noguez Martinez <armandonoguez113@gmail.com>
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: license-file

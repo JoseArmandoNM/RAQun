@@ -1,0 +1,21 @@
+# Entornos virtuales
+venv/
+env/
+.venv/
+ENV/
+.env/
+
+# Archivos de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.ipynb_checkpoints/
+
+# Variables de entorno (¡nunca subas tus claves!)
+.env
+.env.local
+
+**/.DS_Store
+.DS_Store
