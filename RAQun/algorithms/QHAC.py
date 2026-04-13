@@ -1,0 +1,2 @@
+class QHAC(Algorithm):
+    pass

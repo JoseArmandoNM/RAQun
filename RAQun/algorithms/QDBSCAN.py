@@ -1,0 +1,2 @@
+class QDBSCAN(Algorithm):
+    pass

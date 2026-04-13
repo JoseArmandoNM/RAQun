@@ -1,0 +1,2 @@
+class InnerProduct(Circuit):
+    pass

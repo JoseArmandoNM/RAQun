@@ -1,0 +1,2 @@
+class QSC(Algorithm):
+    pass

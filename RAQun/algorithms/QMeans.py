@@ -1,0 +1,2 @@
+class QMeans(Algorithm):
+    pass

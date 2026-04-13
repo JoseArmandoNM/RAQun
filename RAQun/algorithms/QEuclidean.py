@@ -1,0 +1,2 @@
+class QEuclidean(Algorithm):
+    pass
