@@ -1,2 +1,4 @@
-class QHAC(Algorithm):
-    pass
+# from .base import Algorithm
+
+# class QHAC(Algorithm):
+#     pass

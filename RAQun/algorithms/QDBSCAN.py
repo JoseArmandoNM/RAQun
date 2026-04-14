@@ -1,2 +1,4 @@
-class QDBSCAN(Algorithm):
-    pass
+# from .base import Algorithm
+
+# class QDBSCAN(Algorithm):
+#     pass

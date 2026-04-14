@@ -1,2 +1,4 @@
-class QSC(Algorithm):
-    pass
+# from .base import Algorithm
+
+# class QSC(Algorithm):
+#     pass

@@ -3,10 +3,7 @@ name = "RAQun"
 version = "0.1.0"
 description = "RAQun is a Python package for comparing ML algorithms"
 authors = [
-    {
-        name = "Jose Armando Noguez Martinez", 
-        email = "armandonoguez113@gmail.com" 
-    }
+    { name = "Jose Armando Noguez Martinez", email = "armandonoguez113@gmail.com" }
 ]
 readme = "README.md"
 requires-python = ">=3.10"

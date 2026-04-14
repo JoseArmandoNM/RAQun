@@ -1,4 +1,4 @@
-from RAQun.circuits.base import Circuit
+# from RAQun.circuits.base import Circuit
 
-class VQE(Circuit):
-    pass
+# class VQE(Circuit):
+#     pass    

@@ -1,2 +1,2 @@
-class InnerProduct(Circuit):
-    pass
+# class InnerProduct(Circuit):
+#     pass    
