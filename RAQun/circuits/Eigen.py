@@ -1,2 +1,4 @@
-# class Eigen(Circuit):
-#     pass
+from RAQun.circuits import Circuit
+
+class Eigen(Circuit):
+    pass

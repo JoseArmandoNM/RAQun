@@ -1,9 +1,9 @@
-from .base import Algorithm
-from .QDBSCAN import QDBSCAN
-from .QEuclidean import QEuclidean
-from .QHAC import QHAC
-from .QMeans import QMeans
-from .QSC import QSC
+from RAQun.algorithms.base import Algorithm
+from RAQun.algorithms.QDBSCAN import QDBSCAN
+from RAQun.algorithms.QEuclidean import QEuclidean
+from RAQun.algorithms.QHAC import QHAC
+from RAQun.algorithms.QMeans import QMeans
+from RAQun.algorithms.QSC import QSC
 
 __all__ = [
     "Algorithm",
@@ -11,5 +11,5 @@ __all__ = [
     "QEuclidean",
     "QHAC",
     "QMeans",
-    "QSC",
+    "QSC"
 ]

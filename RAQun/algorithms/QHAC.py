@@ -1,4 +1,4 @@
-# from .base import Algorithm
+from RAQun.algorithms.base import Algorithm
 
-# class QHAC(Algorithm):
-#     pass
+class QHAC(Algorithm):
+    pass

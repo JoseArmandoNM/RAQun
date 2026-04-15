@@ -1,3 +1,3 @@
-from RAQun import saludo
+from RAQun.algorithms import QDBSCAN
 
-saludo()
+qdbscan = QDBSCAN()
