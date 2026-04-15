@@ -8,6 +8,13 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.10"
 
+dependencies = [
+    "pennylane>=0.44",
+    "scikit-learn>=1.8",
+    "numpy>=2.4",
+    "pennylane-lightning>=0.44",
+]
+
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"

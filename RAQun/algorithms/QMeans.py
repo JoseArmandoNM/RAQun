@@ -1,11 +1,11 @@
 from RAQun.algorithms.base import Algorithm
-from RAQun.algorithms.QDBSCAN import QDBSCAN
+from RAQun.algorithms.QEuclidean import QEuclidean
 import numpy as np
 from numpy.typing import NDArray
 
 class QMeans(Algorithm):
     """
-    Quantum-inspired K-Means clustering algorithm.
+    Quantum-hybrid K-Means clustering algorithm.
 
     Parameters
     ----------
@@ -35,12 +35,12 @@ class QMeans(Algorithm):
         Parameters
         ----------
         X : NDArray[np.floating]
-            Data matrix of shape (n_samples, n_features).
+            Data matrix of shape (nSamples, nFeatures).
 
         Returns
         -------
         NDArray[np.floating]
-            Array of shape (n_samples,) with cluster labels.
+            Array of shape (nSamples,) with cluster labels.
         """
         pass
 
