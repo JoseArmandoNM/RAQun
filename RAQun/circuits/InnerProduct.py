@@ -84,5 +84,3 @@ class InnerProduct(Circuit):
             Counts of the measurement of the circuit.
         """
         pass
-        
-        

@@ -14,5 +14,6 @@ plugins:
 nav:
   - Home: index.md
   - API:
-      - Algorithm: api/algorithm.md
-      - Circuit: api/circuit.md
+      - Algorithms: api/algorithms.md
+      - Circuits: api/circuits.md
+      - Utils: api/utils.md
