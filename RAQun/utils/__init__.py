@@ -1,5 +1,5 @@
 from .graph import matGen, mmng, inMat
-from .math import log_2, log_t, dist, probs, simMatrix
+from .math import log_2, log_t, dist, probs
 from .qun import ctrlGen, padder
 
 __all__ = [
@@ -10,7 +10,6 @@ __all__ = [
     "log_t",
     "dist",
     "probs",
-    "simMatrix",
     "ctrlGen",
     "padder"
 ]

@@ -2,50 +2,61 @@ from typing import Tuple, List, Dict
 import numpy as np
 from numpy.typing import NDArray
 
-def matGen(probs: NDArray[np.floating]) -> NDArray[np.floating]:
+
+def mmng(params: NDArray[np.floating]) -> NDArray[np.floating]:
     """
-    Generates a disimilarity matrix with probabilities got from the inner product of the vectors.
+        Calculates the matrix of minimum neighbors of the data.
 
-    Parameters
-    ----------
-    probs : NDArray[np.floating]
-        Vector of shape (nSamples,) with the probabilities.
+        Parameters
+        ----------
+        params : list[list[int]]
+            Matrix of shape (nSamples, nFeatures) with the data.
 
-    Returns
-    -------
-    NDArray[np.floating]
-        Matrix of shape (nFeatures, nSamples) with distances.
+        Returns
+        -------
+        NDArray[np.floating]
+            Matrix of shape (nSamples, nearestNeighbors) with the nearest neighbors of each sample.
     """
-    pass
+    mmng = []
+    for vec in params:
+        vec_aux = []
+        for ix, val in enumerate(vec):
+            if val <= self.eps:
+                vec_aux.append(ix)
+        mmng.append(vec_aux)
 
-def mmng(X: NDArray[np.floating]) -> NDArray[np.floating]:
-    """
-    Calculates the matrix of minimum neighbors of the data.
-
-    Parameters
-    ----------
-    X : list[list[int]]
-        Matrix of shape (nSamples, nFeatures) with the data.
-
-    Returns
-    -------
-    NDArray[np.floating]
-        Matrix of shape (nSamples, nearestNeighbors) with the nearest neighbors of each sample.
-    """
-    pass
+    return np.array(mmng)
+#end mmng
 
 def inMat(graph: NDArray[np.floating]) -> NDArray[np.floating]:
     """
-    Calculates the incidence matrix of the given graph.
+        Calculates the incidence matrix of the given graph.
 
-    Parameters
-    ----------
-    graph : NDArray[np.floating]
-        Matrix of shape (nSamples, nearestNeighbors) with the nearest neighbors of each sample.
+        Parameters
+        ----------
+        graph : NDArray[np.floating]
+            Matrix of shape (nSamples, nearestNeighbors) with the nearest neighbors of each sample.
 
-    Returns
-    -------
-    NDArray[np.floating]
-        Matrix of shape (nSamples, nSamples(nSamples-1)/2) with the incidence matrix.
+        Returns
+        -------
+        NDArray[np.floating]
+            Matrix of shape (nSamples, nSamples(nSamples-1)/2) with the incidence matrix.
     """
-    pass
+    
+    m = len(graph)
+    in_matrix = np.zeros((m, int((m-1)*m/2)))
+    for i in range(len(graph)):
+        for j in graph[i]:
+            if i == j:
+                continue
+            elif i < j:
+                pos = int(i*(2*self.m-i-3)/2 + j - 1)
+                val = 1
+            else:
+                pos = int(j*(2*self.m-j-3)/2 + i - 1)
+                val = -1
+
+            in_matrix[i][pos] = val
+    
+    return in_matrix
+#end inMat
