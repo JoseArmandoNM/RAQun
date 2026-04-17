@@ -1,4 +1,4 @@
-from RAQun.utils.math import log_2, log_t
+from RAQun.utils.maths import log_2, log_t
 
 def test_log_2():
     assert log_2(1) == 1

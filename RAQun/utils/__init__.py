@@ -1,5 +1,5 @@
 from .graph import matGen, mmng, inMat
-from .math import log_2, log_t, dist, probs
+from .maths import log_2, log_t, dist, probs
 from .qun import ctrlGen, padder
 
 __all__ = [
