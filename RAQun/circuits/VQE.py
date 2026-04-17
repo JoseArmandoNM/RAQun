@@ -3,7 +3,7 @@ from typing import Dict
 import pennylane as qml
 from pennylane import numpy as np
 from numpy.typing import NDArray
-from RAQun.utils.math import log_t, probs
+from RAQun.utils.maths import log_t, probs
 from RAQun.utils.qun import ctrlGen
 # from pennylane.measurements import Expectation
 

@@ -6,7 +6,7 @@
 
 ## Math Utilities
 
-::: RAQun.utils.math
+::: RAQun.utils.maths
 
 ## Qun Utilities
 

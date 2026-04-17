@@ -2,7 +2,7 @@ from RAQun.algorithms.base import Algorithm
 import numpy as np
 from numpy.typing import NDArray
 from RAQun.circuits import InnerProduct, InnerProduct1R
-from RAQun.utils import mmng
+from RAQun.utils.graph import mmng
 
 class QDBSCAN(Algorithm):
     """

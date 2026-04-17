@@ -3,7 +3,7 @@ from typing import Dict
 import pennylane as qml
 from pennylane import numpy as np
 from numpy.typing import NDArray
-from RAQun.utils.math import log_t, probs
+from RAQun.utils.maths import log_t, probs
 from RAQun.utils.qun import ctrlGen
 
 class InnerProduct(Circuit):
@@ -15,7 +15,7 @@ class InnerProduct(Circuit):
         X : NDArray[np.floating]
             Matrix of shape (nFeatures, nSamples) with the data.
         y : NDArray[np.floating]
-        Vector of shape (nFeatures,) with the label.
+            Vector of shape (nFeatures,) with the label.
     """
 
     def __init__(self, X: NDArray[np.floating], y: NDArray[np.floating]) -> None:

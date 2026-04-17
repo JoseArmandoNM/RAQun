@@ -11,7 +11,7 @@ class QMeans(Algorithm):
         ----------
         k : int
             Number of clusters.
-        max_iters : int
+        maxIters : int
             Maximum number of iterations.
     """
     
