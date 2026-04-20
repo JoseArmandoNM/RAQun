@@ -1,7 +1,7 @@
 from RAQun.algorithms.base import Algorithm
 import numpy as np
 from numpy.typing import NDArray
-from RAQun.utils import matGen
+
 
 class QHAC(Algorithm):
     """

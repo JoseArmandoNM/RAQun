@@ -14,7 +14,6 @@ __all__ = [
     "InnerProduct", 
     "InnerProduct1R", 
     "VQE",
-    "matGen",
     "mmng",
     "inMat",
     "log_2",

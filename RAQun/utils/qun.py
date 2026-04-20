@@ -2,9 +2,16 @@ from typing import Tuple, List, Dict
 import numpy as np
 from numpy.typing import NDArray
 
-def ctrlGen() -> NDArray[np.str_]:
+def ctrlGen(d: int, logd: int) -> NDArray[np.str_]:
     """
         Generates a vector of control strings for the Q-UN algorithm.
+
+        Parameters
+        ----------
+        d : int
+            Number of control strings.
+        logd : int
+            Logarithm of the number of control strings.
 
         Returns
         -------
