@@ -29,7 +29,7 @@ class VQE(Circuit):
         self.X = (X + X.T)/2
         self.norm = np.linalg.norm(X, ord=2)
         self.X = self.X / self.norm
-        self.X = self.padder(self.X)
+        self.X = padder(self.X)
         # self.X = self.X + 0.5 * np.eye(self.X.shape[0])
         for i in range(self.X.shape[0]):
             for j in range(self.X.shape[0]):
@@ -48,14 +48,14 @@ class VQE(Circuit):
             wires = len(self.reg_I)
         )
         self.qnode = qml.QNode(
-            self.circuit, 
+            self.run, 
             self.dev, 
             shots=self.shots
         )
         self.max = np.max(self.X)
     #end __init__
 
-    def run(self) -> float:
+    def run(self, params: NDArray[np.floating]) -> float:
         """
             Calculates the expectation value of the measurement of the circuit.
 
@@ -64,14 +64,20 @@ class VQE(Circuit):
             float
                 Expectation value of the measurement of the circuit.
         """
-        pass
+        qml.StronglyEntanglingLayers(params, wires=self.reg_I[:])
+
+        return qml.expval(self.H)
     #end run
 
     def getStateQnode(self, params: NDArray[np.floating]) -> NDArray[np.floating]:
-        pass
+        @qml.qnode(self.dev)
+        def _circuit(p):
+            qml.StronglyEntanglingLayers(p, wires=self.reg_I)
+            return qml.probs()
+        return _circuit(params)
     #end getStateQnode
 
-    def vqe_opt(iter: int) -> NDArray[np.floating]:
+    def vqe_opt(self, iter: int) -> NDArray[np.floating]:
         """
             Optimizes the circuit using the VQE algorithm.
 
@@ -85,6 +91,19 @@ class VQE(Circuit):
             NDArray[np.floating]
                 Vector of shape (nFeatures,) with the optimal parameters.
         """
-        pass
+        layers = 2
+        shape = qml.StronglyEntanglingLayers.shape(n_layers= layers, n_wires = self.log_n)
+        params = np.random.random(size=shape, requires_grad = True)
+        opt = qml.GradientDescentOptimizer(stepsize = 0.1)
+        for i in range(iter):
+            params, energy = opt.step_and_cost(self.qnode, params)
+            if i % 10 == 0:
+                print (f'Iteración: {i}')
+        
+        qml.StronglyEntanglingLayers(params, wires=self.reg_I[:])
+
+        autovector = self.getStateQnode(params)
+
+        return autovector
     #end vqe_opt
 #end VQE

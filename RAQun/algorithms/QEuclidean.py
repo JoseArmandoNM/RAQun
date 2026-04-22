@@ -1,4 +1,5 @@
 from RAQun.algorithms.base import Algorithm
+from RAQun.circuits import InnerProduct, InnerProduct1R
 
 class QEuclidean(Algorithm):
     """
@@ -23,22 +24,28 @@ class QEuclidean(Algorithm):
             y : NDArray[np.floating]
                 Labels of shape (nSamples).
         """
-        pass
+        self.X = X
     #end __init__
 
-    def train(self) -> NDArray[np.floating]:
+    def fit(self, X: NDArray[np.floating], y: NDArray[np.floating]) -> None:
         """
-            Calculates the mean of each class.
+            Trains the model with the given matrix data and labels vector.
+
+            Parameters
+            ----------
+            X : NDArray[np.floating]
+                Data matrix of shape (nSamples, nFeatures).
+            y : NDArray[np.floating]
+                Labels of shape (nSamples).
 
             Returns
             -------
-            NDArray[np.floating]
-                Array of shape (nClasses, nFeatures) with the mean of each class.
+            None
         """
         pass
     #end train
 
-    def fit(self, X: NDArray[np.floating]) -> NDArray[np.floating]:
+    def predict(self, X: NDArray[np.floating]) -> NDArray[np.floating]:
         """
             Predicts the class of each sample in the data matrix.
 
