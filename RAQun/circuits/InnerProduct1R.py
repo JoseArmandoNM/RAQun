@@ -19,7 +19,7 @@ class InnerProduct1R(Circuit):
                 Vector of shape (nFeatures,) with the label.
         """
         self.X = X
-        self.labels = labels
+        self.labels = y
         self.Y = np.unique(self.labels)
         self.C, self.norms2 = self.train()
         self.log_k = np.ceil(np.log2(self.C.shape[0])).astype(int)
@@ -61,7 +61,7 @@ class InnerProduct1R(Circuit):
         qml.Hadamard(wires=self.reg_A)
         
         for i, p in enumerate(self.P):
-            theta = 2 * np.arcsin(x[i]/np.max(self.X))
+            theta = 2 * np.arcsin(vec[i]/np.max(self.X))
             ctrl = p + '0'
             ctrl = [int(c) for c in ctrl]
             qml.ctrl(
