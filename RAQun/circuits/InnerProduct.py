@@ -30,7 +30,7 @@ class InnerProduct(Circuit):
                 Vector of shape (nFeatures,) with the label.
         """
         self.X = X
-        self.labels = labels
+        self.labels = y
         self.Y = np.unique(self.labels)
         self.nQubits: int = self.nQubitsCalc()
         self.C, self.norms2 = self.train()

@@ -78,43 +78,6 @@ class QEuclidean(Algorithm):
         dists = np.array(dists)
 
         i: np.int64 = np.argmin(dists)
-        return self.y[i]
+        return self.circuit.Y[i]
     #end fit
 #end QEuclidean
-
-X_train = [
-    [1.0, 1.0],
-    [1.2, 0.8],
-    [0.8, 1.1],
-    [1.1, 1.3],
-    [40.0, 40.0],
-    [42.0, 38.0],
-    [38.0, 41.0],
-    [41.0, 43.0]
-]
-y_train = [0, 0, 0, 0, 1, 1, 1, 1]
-X_train = np.array(X_train)
-y_train = np.array(y_train)
-
-X_test = [
-    [1.1, 0.9],
-    [39.9, 42.2],
-    [25.0, 25.0]
-]
-y_test = [0, 1, '?']
-
-
-
-df = pd.read_csv("/home/elma/Documentos/RAQun/instances.csv")
-X = df.drop(columns=['Class/ASD'])
-y = df['Class/ASD']
-
-X = X.to_numpy()
-y = y.to_numpy()
-
-model = QEuclidean()
-model.fit(X, y)
-
-for i, vec in enumerate(X):
-    pred = model.predict(vec)
-    print(f"Vector: {vec}, Predicción: {pred}, Real: {y[i]}")
