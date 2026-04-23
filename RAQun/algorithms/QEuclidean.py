@@ -67,11 +67,10 @@ class QEuclidean(Algorithm):
         """
         probsVec = probs(self.circuit.qnode(vec), 2)
         print(probsVec)
-        centroids, norms2 = self.circuit.train()
-
+        
         dists: list = list([])
-        for i in range(norms2.shape[0]):
-            Z: np.float64 = (norms2[i] + np.linalg.norm(vec) ** 2)
+        for i in range(self.circuit.C.shape[0]):
+            Z: np.float64 = (self.circuit.norms2[i] + np.linalg.norm(vec) ** 2)
             dist: np.float64 = 4 * Z * (1 - probsVec[i]) 
             dists.append(dist)
 
@@ -81,3 +80,14 @@ class QEuclidean(Algorithm):
         return self.circuit.Y[i]
     #end fit
 #end QEuclidean
+
+
+X = pd.read_csv("/home/elma/Documentos/RAQun/instances.csv")
+y = X.iloc[:, -1].to_numpy()
+X = X.iloc[:, :-1].to_numpy()
+
+model = QEuclidean(metric="swap")
+model.fit(X, y)
+
+for i in range(X.shape[0]):
+    print(f"Label: {y[i]}, Predicted: {model.predict(X[i])}")

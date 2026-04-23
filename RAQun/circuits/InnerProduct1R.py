@@ -14,24 +14,28 @@ class InnerProduct1R(Circuit):
             Parameters
             ----------
             X : NDArray[np.floating]
-                Matrix of shape (nFeatures, nSamples) with the data.
+                Matrix of shape (nSamples, nFeatures) with the data.
             y : NDArray[np.floating]
-                Vector of shape (nFeatures,) with the label.
+                Vector of shape (nSamples,) with the label.
         """
         self.X = X
         self.labels = y
         self.Y = np.unique(self.labels)
         self.C, self.norms2 = self.train()
-        self.log_k = np.ceil(np.log2(self.C.shape[0])).astype(int)
-        self.n, self.log_n = log_t(X.shape[0])
-        self.d, self.log_d = log_t(X.shape[1])
+        
+        self.log_k = int(np.ceil(np.log2(self.C.shape[0])))
+        self.n, self.log_n = log_t(self.X.shape[0])
+        self.d, self.log_d = log_t(self.X.shape[1])
+        
         self.P = ctrlGen(self.d, self.log_d)
         self.Q = ctrlGen(self.C.shape[0], self.log_k)
+        
         self.dev = qml.device(
             "lightning.qubit", 
-            wires=self.log_n + self.log_d + 2
+            wires=self.log_k + self.log_d + 2
         )
         self.qnode = qml.QNode(self.run, self.dev, shots=1024)
+        
         self.reg_J = [i for i in range(self.log_k)]
         self.reg_I = [i for i in range(self.log_k, self.log_k + self.log_d)]
         self.reg_V = self.log_k + self.log_d
@@ -86,12 +90,10 @@ class InnerProduct1R(Circuit):
         return qml.counts(wires=self.reg_J[::]+[self.reg_A])
     #end run
 
-    def train(self) -> NDArray[np.float64]: 
+    def train(self) -> tuple[NDArray[np.float64], NDArray[np.float64]]: 
         centroids = np.array([ self.X[self.labels==c].mean(axis=0) for c in self.Y], dtype=np.float64)
         normas = np.array([np.linalg.norm(c) ** 2 for c in centroids], dtype=np.float64)
         
         return centroids, normas
     #end train
-
-
 #end InnerProduct1R

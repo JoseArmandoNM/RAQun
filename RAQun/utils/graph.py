@@ -2,6 +2,8 @@ from typing import Tuple, List, Dict
 import numpy as np
 from numpy.typing import NDArray
 
+from RAQun.circuits.InnerProduct1R import InnerProduct1R
+
 
 def mmng(params: NDArray[np.floating]) -> NDArray[np.floating]:
     """
@@ -60,3 +62,38 @@ def inMat(graph: NDArray[np.floating]) -> NDArray[np.floating]:
     
     return in_matrix
 #end inMat
+
+
+def matGen(X: NDArray[np.floating]) -> NDArray[np.floating]:
+    pass
+#end matGen
+
+'''
+def matGen(X: NDArray[np.floating]) -> NDArray[np.floating]:
+    """
+        Generates a disimilarity matrix with probabilities got from the inner product of the vectors.
+
+        Parameters
+        ----------
+        X : NDArray[np.floating]
+            Data matrix of shape (nSamples, nFeatures).
+
+        Returns
+        -------
+        NDArray[np.floating]
+            Matrix of shape (nFeatures, nSamples) with distances.
+    """
+
+    circuit = InnerProduct1R()
+    N: np.int64 = len(X)
+    mat: NDArray[np.floating] = np.zeros((N, N))
+
+    for i, rec in enumerate(X):
+        counts = circuit.run(rec, X)
+        probs = probs(counts, N)
+        dists = dist(probs)
+        mat[i] = dists
+
+    return mat
+#end matGen
+'''
