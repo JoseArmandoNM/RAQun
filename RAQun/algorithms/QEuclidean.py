@@ -81,13 +81,14 @@ class QEuclidean(Algorithm):
     #end fit
 #end QEuclidean
 
+if __name__ == '__main__':
+    # X = pd.read_csv("/home/maninsch/Documentos/RAQun/instances.csv")
+    # y = X.iloc[:, -1].to_numpy()
+    # X = X.iloc[:, :-1].to_numpy()
 
-X = pd.read_csv("/home/elma/Documentos/RAQun/instances.csv")
-y = X.iloc[:, -1].to_numpy()
-X = X.iloc[:, :-1].to_numpy()
+    # model = QEuclidean(metric="hadamard")
+    # model.fit(X, y)
 
-model = QEuclidean(metric="hadamard")
-model.fit(X, y)
-
-for i in range(X.shape[0]):
-    print(f"Label: {y[i]}, Predicted: {model.predict(X[i])}")
+    # for i in range(X.shape[0]):
+    # print(f"Label: {y[i]}, Predicted: {model.predict(X[i])}")
+    pass

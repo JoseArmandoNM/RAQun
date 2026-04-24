@@ -4,6 +4,7 @@ from numpy.typing import NDArray
 from RAQun.circuits import InnerProduct, InnerProduct1R
 from RAQun.utils.graph import mmng, matGen
 import pandas as pd
+from collections import deque
 
 class QDBSCAN(Algorithm):
     """
@@ -50,24 +51,24 @@ class QDBSCAN(Algorithm):
         """
         if paramsType == 'data':
             dists = matGen(params)
-            mmng = mmng(dists)
+            mmng_list = mmng(dists)
         elif paramsType == 'mmng':
-            mmng = params
+            mmng_list = params
         elif paramsType == 'distances':
-            mmng = mmng(params)
+            mmng_list = mmng(params)
         else:
             raise ValueError(f'Params type {paramsType} not recognized.')
 
-        visited = [False] * len(mmng)
+        visited = [False] * len(mmng_list)
         clusters = []
-        labels = [-1] * len(mmng)
+        labels = [-1] * len(mmng_list)
 
-        for ix, vs in enumerate(mmng):
+        for ix, vs in enumerate(mmng_list):
             if visited[ix]:
                 continue
             visited[ix] = True
 
-            if len(vs) >= self.min_pts:
+            if len(vs) >= self.minSamples:
                 current = {ix}
                 clusters.append(current)
                 queue = deque(vs)
@@ -82,8 +83,8 @@ class QDBSCAN(Algorithm):
                         continue
                     visited[vec] = True
                     
-                    vs_in = mmng[vec]
-                    if len(vs_in) >= self.min_pts:
+                    vs_in = mmng_list[vec]
+                    if len(vs_in) >= self.minSamples:
                         queue.extend(vs_in)
         
         for id, cluster in enumerate(clusters):
@@ -97,13 +98,17 @@ class QDBSCAN(Algorithm):
     #end fit
 #end QDBSCAN
 
-X = pd.read_csv('/home/elma/Documentos/RAQun/instances.csv')
-X = X[:-1]
+
+if __name__ == '__main__':
+    # X = pd.read_csv("/home/maninsch/Documentos/RAQun/instances.csv")
+    # X = X[:-1]
 
 
-mat = matGen(X.to_numpy())
+    # mat = matGen(X.to_numpy())
 
-mmng = mmng(mat)
+    # mmng = mmng(mat)
 
-print(f'La matriz de similitud es: \n{mat}\n\n\n\n\n\n')
-print(f'El mmng es: \n{mmng}\n\n\n\n\n\n')
+    # print(f'La matriz de similitud es: \n{mat}\n\n\n\n\n\n')
+    # print(f'El mmng es: \n{mmng}\n\n\n\n\n\n')
+
+    pass

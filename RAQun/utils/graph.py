@@ -6,7 +6,7 @@ from RAQun.circuits.InnerProduct1R import InnerProduct1R
 from RAQun.utils.maths import probs, dist
 
 
-def mmng(params: NDArray[np.floating], eps: float = 0.5) -> NDArray[np.floating]:
+def mmng(params: NDArray[np.floating], eps: float = 0.5) -> List[List[int]]:
     """
         Calculates the matrix of minimum neighbors of the data.
 
@@ -30,7 +30,7 @@ def mmng(params: NDArray[np.floating], eps: float = 0.5) -> NDArray[np.floating]
                 vec_aux.append(ix)
         mmng.append(vec_aux)
 
-    return np.array(mmng)
+    return mmng
 #end mmng
 
 def inMat(graph: NDArray[np.floating]) -> NDArray[np.floating]:
