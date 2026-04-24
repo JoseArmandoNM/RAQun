@@ -3,9 +3,10 @@ import numpy as np
 from numpy.typing import NDArray
 
 from RAQun.circuits.InnerProduct1R import InnerProduct1R
+from RAQun.utils.maths import probs, dist
 
 
-def mmng(params: NDArray[np.floating]) -> NDArray[np.floating]:
+def mmng(params: NDArray[np.floating], eps: float = 0.5) -> NDArray[np.floating]:
     """
         Calculates the matrix of minimum neighbors of the data.
 
@@ -13,6 +14,8 @@ def mmng(params: NDArray[np.floating]) -> NDArray[np.floating]:
         ----------
         params : list[list[int]]
             Matrix of shape (nSamples, nFeatures) with the data.
+        eps : float
+            Maximum distance between two samples for one to be considered as in the neighborhood of the other.
 
         Returns
         -------
@@ -23,7 +26,7 @@ def mmng(params: NDArray[np.floating]) -> NDArray[np.floating]:
     for vec in params:
         vec_aux = []
         for ix, val in enumerate(vec):
-            if val <= self.eps:
+            if val <= eps:
                 vec_aux.append(ix)
         mmng.append(vec_aux)
 
@@ -63,12 +66,6 @@ def inMat(graph: NDArray[np.floating]) -> NDArray[np.floating]:
     return in_matrix
 #end inMat
 
-
-def matGen(X: NDArray[np.floating]) -> NDArray[np.floating]:
-    pass
-#end matGen
-
-'''
 def matGen(X: NDArray[np.floating]) -> NDArray[np.floating]:
     """
         Generates a disimilarity matrix with probabilities got from the inner product of the vectors.
@@ -84,16 +81,22 @@ def matGen(X: NDArray[np.floating]) -> NDArray[np.floating]:
             Matrix of shape (nFeatures, nSamples) with distances.
     """
 
-    circuit = InnerProduct1R()
     N: np.int64 = len(X)
+    y_fake = np.arange(N)
+    circuit = InnerProduct1R(X, y_fake)
     mat: NDArray[np.floating] = np.zeros((N, N))
 
     for i, rec in enumerate(X):
-        counts = circuit.run(rec, X)
-        probs = probs(counts, N)
-        dists = dist(probs)
+        counts = circuit.qnode(rec)
+        p_vec = probs(counts, N)
+        
+        dists = np.array([])
+        for j in range(N):
+            Z = circuit.norms2[j] + np.linalg.norm(rec)**2
+            dist_val = 4 * Z * (1 - p_vec[j])
+            dists = np.append(dists, dist_val)
+            
         mat[i] = dists
 
     return mat
 #end matGen
-'''

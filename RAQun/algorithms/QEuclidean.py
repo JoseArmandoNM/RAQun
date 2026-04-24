@@ -86,7 +86,7 @@ X = pd.read_csv("/home/elma/Documentos/RAQun/instances.csv")
 y = X.iloc[:, -1].to_numpy()
 X = X.iloc[:, :-1].to_numpy()
 
-model = QEuclidean(metric="swap")
+model = QEuclidean(metric="hadamard")
 model.fit(X, y)
 
 for i in range(X.shape[0]):
