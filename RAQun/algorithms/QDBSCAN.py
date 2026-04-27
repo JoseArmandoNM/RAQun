@@ -98,6 +98,7 @@ class QDBSCAN(Algorithm):
     #end fit
 #end QDBSCAN
 
+<<<<<<< HEAD
 
 if __name__ == '__main__':
     # X = pd.read_csv("/home/maninsch/Documentos/RAQun/instances.csv")
@@ -112,3 +113,15 @@ if __name__ == '__main__':
     # print(f'El mmng es: \n{mmng}\n\n\n\n\n\n')
 
     pass
+=======
+# X = pd.read_csv('/home/elma/Documentos/RAQun/instances.csv')
+# X = X[:-1]
+
+
+# mat = matGen(X.to_numpy())
+
+# mmng = mmng(mat)
+
+# print(f'La matriz de similitud es: \n{mat}\n\n\n\n\n\n')
+# print(f'El mmng es: \n{mmng}\n\n\n\n\n\n')
+>>>>>>> d6810bb (ya quedó el qhac)
