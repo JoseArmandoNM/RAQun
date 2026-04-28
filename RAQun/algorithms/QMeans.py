@@ -26,7 +26,11 @@ class QMeans(Algorithm):
                 Number of clusters.
             maxIters : int
                 Maximum number of iterations before ending.
+            metric : str
+                Metric to use for the quantum circuit.
+                Options: 'hadamard' or 'swap'.
         """
+
         self.k: int = k
         self.maxIters: int = maxIters
         self.history: list = [] 

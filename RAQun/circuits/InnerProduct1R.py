@@ -7,28 +7,37 @@ from RAQun.utils.maths import log_t, probs
 from RAQun.utils.qun import ctrlGen
 
 class InnerProduct1R(Circuit):
-    def __init__(self, X: NDArray[np.floating], y: NDArray[np.floating]) -> None:
+    """
+        Calculates the inner product of two quantum states by using Hadamard Test.
+
+        Parameters
+        ----------
+        X : NDArray[np.floating]
+            Matrix of shape (nSamples, nFeatures) with the data.
+        y : NDArray[np.floating]
+            Vector of shape (nSamples,) with the label.
+    """
+    
+    def __init__(self, vec: NDArray[np.floating], vecs: NDArray[np.floating]) -> None:
         """
             Initializes the class variables.
 
             Parameters
             ----------
-            X : NDArray[np.floating]
+            vec : NDArray[np.floating]
+                Vector of shape (nFeatures,).
+            vecs : NDArray[np.floating]
                 Matrix of shape (nSamples, nFeatures) with the data.
-            y : NDArray[np.floating]
-                Vector of shape (nSamples,) with the label.
         """
-        self.X = X
-        self.labels = y
-        self.Y = np.unique(self.labels)
-        self.C, self.norms2 = self.train()
+        self.vec = vec
+        self.vecs = vecs
         
-        self.log_k = int(np.ceil(np.log2(self.C.shape[0])))
-        self.n, self.log_n = log_t(self.X.shape[0])
-        self.d, self.log_d = log_t(self.X.shape[1])
+        self.log_k = int(np.ceil(np.log2(self.vecs.shape[0])))
+        self.n, self.log_n = log_t(self.vecs.shape[0])
+        self.d, self.log_d = log_t(self.vecs.shape[1])
         
         self.P = ctrlGen(self.d, self.log_d)
-        self.Q = ctrlGen(self.C.shape[0], self.log_k)
+        self.Q = ctrlGen(self.vecs.shape[0], self.log_k)
         
         self.dev = qml.device(
             "lightning.qubit", 
@@ -42,20 +51,16 @@ class InnerProduct1R(Circuit):
         self.reg_A = self.log_k + self.log_d + 1
     #end __init__
 
-    def run(self, vec: NDArray[np.floating]) -> dict:
+    def run(self) -> dict:
         """
             Calculates the counts of the measurement of the circuit.
-
-            Parameters
-            ----------
-            vec : NDArray[np.floating]
-                Vector of shape (nFeatures,).
 
             Returns
             -------
             dict
                 Counts of the measurement of the circuit.
         """
+
         nn: NDArray[np.float64] = np.array([])
 
         for i in self.reg_J:
@@ -65,7 +70,7 @@ class InnerProduct1R(Circuit):
         qml.Hadamard(wires=self.reg_A)
         
         for i, p in enumerate(self.P):
-            theta = 2 * np.arcsin(np.clip(vec[i]/np.max(self.X), -1.0, 1.0))
+            theta = 2 * np.arcsin(np.clip(self.vec[i]/np.max(self.vecs), -1.0, 1.0))
             ctrl = p + '0'
             ctrl = [int(c) for c in ctrl]
             qml.ctrl(
@@ -76,7 +81,7 @@ class InnerProduct1R(Circuit):
             
         for j, q in enumerate(self.Q):
             for i, p in enumerate(self.P):
-                theta = 2 * np.arcsin(np.clip(self.C[j][i]/np.max(self.X), -1.0, 1.0))
+                theta = 2 * np.arcsin(np.clip(self.vecs[j][i]/np.max(self.vecs), -1.0, 1.0))
                 ctrl = q + p + '1'
                 ctrl = [int(c) for c in ctrl]
                 qml.ctrl(
@@ -89,11 +94,11 @@ class InnerProduct1R(Circuit):
         
         return qml.counts(wires=self.reg_J[::]+[self.reg_A])
     #end run
-
-    def train(self) -> tuple[NDArray[np.float64], NDArray[np.float64]]: 
-        centroids = np.array([ self.X[self.labels==c].mean(axis=0) for c in self.Y], dtype=np.float64)
-        normas = np.array([np.linalg.norm(c) ** 2 for c in centroids], dtype=np.float64)
-        
-        return centroids, normas
-    #end train
 #end InnerProduct1R
+
+if __name__ == '__main__':
+    vec = np.array([1, 2, 3])
+    vecs = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+    circ = InnerProduct1R(vec, vecs)
+
+    print(circ.qnode())

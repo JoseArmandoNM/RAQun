@@ -29,7 +29,14 @@ class QSC(Algorithm):
                 Number of clusters.
             eps : float
                 The maximum distance between two samples for one to be considered as in the neighborhood of the other.
+            paramType : str
+                Type of the given matrix.
+                Options: 'data', 'mmng', 'similarity', 'inMatrix'.
+            eigen : str
+                Method to calculate the Eigenvectors.
+                Options: 'classical', 'qpe', 'vqe'.
         """
+
         self.k = k
         self.eps = eps
         paramOptions: list = ['data', 'mmng', 'similarity', 'inMatrix']
@@ -48,11 +55,9 @@ class QSC(Algorithm):
 
             Parameters
             ----------
-            B : NDArray[np.floating]
-                Data matrix of shape (nSamples, nSamples(nSamples-1)/2).
-            isQuantum : bool
-                Whether to use the quantum method to calculate de Eigenvectors.
-
+            params : list[list[int]] | NDArray[np.floating]
+                Data matrix of shape (nSamples, nFeatures) or (nSamples, nSamples).
+            
             Returns
             -------
             NDArray[np.floating]

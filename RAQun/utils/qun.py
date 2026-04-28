@@ -18,6 +18,7 @@ def ctrlGen(d: int, logd: int) -> NDArray[np.str_]:
         NDArray[np.str_]
             Vector of control strings.
     """
+    
     P = []
     numsD = set([i for i in range(logd)])
     for i in range(d):

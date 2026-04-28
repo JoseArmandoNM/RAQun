@@ -26,6 +26,7 @@ class QEuclidean(Algorithm):
                 Metric to use for the quantum circuit.
                 Options: 'hadamard' or 'swap'.
         """
+
         self.metric = metric.lower()
         if self.metric != "hadamard" and self.metric != "swap":
             raise ValueError("Metric not supported. Use 'hadamard' or 'swap'.")
@@ -46,10 +47,23 @@ class QEuclidean(Algorithm):
             -------
             None
         """
+        
         self.X = X
         self.y = y
-        self.circuit = InnerProduct1R(self.X, self.y) if self.metric == "hadamard" else InnerProduct(self.X, self.y)
-    #end train
+
+        self.Y = np.unique(self.y)
+        centroids = np.array([
+            self.X[self.y==c].mean(axis=0) for c in self.Y], 
+            dtype=np.float64
+        )
+        normas = np.array([
+            np.linalg.norm(c) ** 2 for c in centroids], 
+            dtype=np.float64
+        )
+
+        self.centroids = centroids
+        self.normas = normas
+    #end fit
 
     def predict(self, vec: NDArray[np.floating]) -> NDArray[np.floating]:
         """
@@ -65,29 +79,30 @@ class QEuclidean(Algorithm):
             NDArray[np.floating]
                 Array of shape (nSamples,) with predicted class for each sample.
         """
-        probsVec = probs(self.circuit.qnode(vec), 2)
+        self.circuit = InnerProduct1R(vec, self.centroids) if self.metric == "hadamard" else InnerProduct(vec, self.centroids)
+        
+        probsVec = probs(self.circuit.qnode(), self.centroids.shape[0])
         
         dists: list = list([])
-        for i in range(self.circuit.C.shape[0]):
-            Z: np.float64 = (self.circuit.norms2[i] + np.linalg.norm(vec) ** 2)
+        for i in range(self.centroids.shape[0]):
+            Z: np.float64 = (self.normas[i] + np.linalg.norm(vec) ** 2)
             dist: np.float64 = 4 * Z * (1 - probsVec[i]) 
             dists.append(dist)
 
         dists = np.array(dists)
 
         i: np.int64 = np.argmin(dists)
-        return self.circuit.Y[i]
-    #end fit
+        return self.Y[i]
+    #end predict
 #end QEuclidean
 
 if __name__ == '__main__':
-    # X = pd.read_csv("/home/maninsch/Documentos/RAQun/instances.csv")
-    # y = X.iloc[:, -1].to_numpy()
-    # X = X.iloc[:, :-1].to_numpy()
+    X = pd.read_csv("/home/elma/Documentos/RAQun/instances.csv")
+    y = X.iloc[:, -1].to_numpy()
+    X = X.iloc[:, :-1].to_numpy()
 
-    # model = QEuclidean(metric="hadamard")
-    # model.fit(X, y)
+    model = QEuclidean(metric="swap")
+    model.fit(X, y)
 
-    # for i in range(X.shape[0]):
-    # print(f"Label: {y[i]}, Predicted: {model.predict(X[i])}")
-    pass
+    for i in range(X.shape[0]):
+        print(f"Label: {y[i]}, Predicted: {model.predict(X[i])}")

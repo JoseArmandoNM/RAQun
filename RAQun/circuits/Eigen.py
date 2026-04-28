@@ -5,7 +5,6 @@ from pennylane import numpy as np
 from numpy.typing import NDArray
 from RAQun.utils.maths import log_t, probs
 from RAQun.utils.qun import ctrlGen, padder
-# from pennylane.measurements import Expectation
 
 class Eigen(Circuit):
     """
@@ -26,6 +25,7 @@ class Eigen(Circuit):
             X : NDArray[np.floating]
                 Matrix of shape (nFeatures, nSamples) with the data.
         """
+
         self.X = (X + X.T)/2
         self.norm = np.linalg.norm(X, ord=2)
         self.X = self.X / self.norm
@@ -57,18 +57,12 @@ class Eigen(Circuit):
         """
             Calculates the counts of the measurement of the circuit.
 
-            Parameters
-            ----------
-            t : int
-                Time evolution parameter.
-            wires : list
-                List of wires to apply the oracle to.
-
             Returns
             -------
             dict
                 Counts of the measurement of the circuit.
         """
+
         for i in self.reg_A:
             qml.Hadamard(wires = i)
         
@@ -99,13 +93,27 @@ class Eigen(Circuit):
             Returns
             -------
             qml.QubitUnitary
-                Oracle that implements the unitary operator U.
+                Expected values of the oracle that implements the unitary operator U.
         """
         H = qml.Hermitian(self.X, wires = wires)
         return qml.exp(H, -1j*t)
     #end oracle
 
-    def vectors(self, k: int):
+    def vectors(self, k: int) -> NDArray[np.floating]:
+        """
+            Calculates the eigenvectors of the matrix.
+
+            Parameters
+            ----------
+            k : int
+                Number of eigenvectors to calculate.
+
+            Returns
+            -------
+            NDArray[np.floating]
+                Matrix of shape (nFeatures, k) with the eigenvectors.
+        """
+
         p = list(self.probs().values())
         mat = []
 
@@ -119,7 +127,7 @@ class Eigen(Circuit):
         return np.transpose(vecs)
     #end vectors
 
-    def probs(self):
+    def probs(self) -> dict:
         probs = self.qnode()
         probsAux = {}
         k = self.log_m + self.log_n
@@ -132,4 +140,3 @@ class Eigen(Circuit):
         return probsAux
     #end probs
 #end Eigen
-

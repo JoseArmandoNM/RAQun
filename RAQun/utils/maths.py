@@ -16,6 +16,7 @@ def log_2(num: int) -> int:
         int
             Ceiling of the base-2 logarithm of the number.
     """
+
     return int(np.ceil(np.log2(num))) if num > 1 else 1
 #end log_2
 
@@ -35,10 +36,11 @@ def log_t(num: int) -> tuple[int, int]:
         int 
             Number given as a parameter
     """
+
     return num, int(np.ceil(np.log2(num))) if num > 1 else 1
 #end log_t
 
-def dist(probs: NDArray[np.floating], method: str = 'hadamard', norms2: NDArray[np.floating] = None) -> float:
+def dist(probs: NDArray[np.floating], method: str = 'hadamard', vecs: NDArray[np.floating] = None) -> NDArray[np.floating]:
     """
         Calculates the Euclidean distance between two vectors.
 
@@ -50,15 +52,21 @@ def dist(probs: NDArray[np.floating], method: str = 'hadamard', norms2: NDArray[
             Method to calculate the inner product.
             It only accepts 'hadamard' or 'swap'.
             Does not distinguish lower or upper case.
-        norms2 : NDArray[np.floating]
-            Vector of squared norms of the vectors.
-            The first element is the squared norm of the vector to compare against.
-            The rest of the elements are the squared norms of the vectors to compare with.
+            Its default value is 'hadamard'.
+        vecs : NDArray[np.floating]
+            Vector of the points to compare with.
+            The first element is the vector to compare against.
+            The rest of the elements are the vectors to compare with.
 
         Returns
         -------
-        float
+        NDArray[np.floating]
             Approximation of the euclidean distance between a vector and a list of vectors.
+
+        Raises
+        ------
+        ValueError
+            If the method is not recognized.
     """
 
     method = method.lower()
@@ -66,8 +74,8 @@ def dist(probs: NDArray[np.floating], method: str = 'hadamard', norms2: NDArray[
         raise ValueError(f'Method {method} not recognized.')
     
     dists = np.array([], dtype=np.float64)
-    vec = norms2[0]
-    vecs = norms2[1:]
+    vec = vecs[0]
+    vecs = vecs[1:]
     for i in range(len(probs)):
         z = 1 if method == 'hadamard' else vec + vecs[i]
         dists = np.append(dists, 4*z*(1-probs[i]))

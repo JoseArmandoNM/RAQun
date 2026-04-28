@@ -18,33 +18,26 @@ class InnerProduct(Circuit):
             Vector of shape (nSamples,) with the label.
     """
 
-    def __init__(self, X: NDArray[np.floating], y: NDArray[np.floating]) -> None:
+    def __init__(self, vec: NDArray[np.floating], vecs: NDArray[np.floating]) -> None:
         """
             Initializes the class variables.
 
             Parameters
             ----------
-            X : NDArray[np.floating]
+            vec : NDArray[np.floating]
+                Vector of shape (nFeatures,).
+            vecs : NDArray[np.floating]
                 Matrix of shape (nSamples, nFeatures) with the data.
-            y : NDArray[np.floating]
-                Vector of shape (nSamples,) with the label.
         """
-        self.X = X
-        self.labels = y
-        self.Y = np.unique(self.labels)
-        self.C, self.norms2 = self.train()
+        self.vec = vec
+        self.vecs = vecs
         
         
-        self.log_c = int(np.ceil(np.log2(self.C.shape[0])))
-        self.d, self.log_d = log_t(self.X.shape[1])
+        self.log_c = int(np.ceil(np.log2(self.vecs.shape[0])))
+        self.d, self.log_d = log_t(self.vecs.shape[1])
         
-        self.Q = ctrlGen(self.C.shape[0], self.log_c)
+        self.Q = ctrlGen(self.vecs.shape[0], self.log_c)
         
-        # Wires needed:
-        # log_c for index register (reg_J)
-        # log_d for vector vec (reg_U)
-        # log_d for centroids C (reg_V)
-        # 1 for ancilla (reg_A)
         self.dev = qml.device(
             "lightning.qubit", 
             wires=self.log_c + 2 * self.log_d + 1
@@ -56,19 +49,6 @@ class InnerProduct(Circuit):
         self.reg_V = [i for i in range(self.log_c + self.log_d, self.log_c + 2 * self.log_d)]
         self.reg_A = [i for i in range(self.log_c + 2 * self.log_d, self.log_c + 2 * self.log_d + 1)]
     #end __init__
-
-    def train(self) -> tuple[NDArray[np.float64], NDArray[np.float64]]: 
-        centroids = np.array([
-            self.X[self.labels==c].mean(axis=0) for c in self.Y], 
-            dtype=np.float64
-        )
-        normas = np.array([
-            np.linalg.norm(c) ** 2 for c in centroids], 
-            dtype=np.float64
-        )
-
-        return centroids, normas
-    #end train
 
     def normalize(self, vec: NDArray[np.floating]) -> NDArray[np.floating]:
         """
@@ -84,6 +64,7 @@ class InnerProduct(Circuit):
             NDArray[np.floating]
                 Normalized vector padded to 2**log_d size.
         """
+
         vec = np.pad(vec, (0, 2**self.log_d - vec.size), mode='constant')
         vec = vec / np.linalg.norm(vec)
         return vec
@@ -100,24 +81,21 @@ class InnerProduct(Circuit):
             wires : list
                 List of wires to encode the state into.
         """
+
         qml.StatePrep(self.normalize(C), wires=wires)
     #end initialize
 
-    def run(self, vec: NDArray[np.floating]) -> dict:
+    def run(self) -> dict:
         """
             Calculates the counts of the measurement of the circuit.
-
-            Parameters
-            ----------
-            vec : NDArray[np.floating]
-                Vector of shape (nFeatures).
 
             Returns
             -------
             dict
                 Counts of the measurement of the circuit.
         """
-        x: NDArray[np.float64] = self.normalize(vec)
+
+        x: NDArray[np.float64] = self.normalize(self.vec)
 
         for i in self.reg_J:
             qml.Hadamard(wires=i)
@@ -125,19 +103,16 @@ class InnerProduct(Circuit):
         for i in self.reg_A:
             qml.Hadamard(wires=i)
         
-        # Initialize x in reg_U
         self.initialize(x, self.reg_U)
         
-        # Initialize centroids in reg_V controlled by reg_J
         for i, q in enumerate(self.Q):
             q = [int(c) for c in q]
             qml.ctrl(
                 self.initialize,
                 control=self.reg_J,
                 control_values=q 
-            )(self.C[i], wires=self.reg_V)
+            )(self.vecs[i], wires=self.reg_V)
 
-        # CSWAP test
         for i in self.reg_U:
             qml.CSWAP(wires=[self.reg_A[0], i, i+self.log_d])
         
@@ -147,3 +122,11 @@ class InnerProduct(Circuit):
         return qml.counts(wires=self.reg_J[:] + self.reg_A[:])
     #end run
 #end InnerProduct
+
+
+if __name__ == '__main__':
+    vec = np.array([1, 2, 3])
+    vecs = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+    circ = InnerProduct(vec, vecs)
+
+    print(circ.qnode())

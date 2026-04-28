@@ -16,12 +16,14 @@ def mmng(params: NDArray[np.floating], eps: float = 0.5) -> List[List[int]]:
             Matrix of shape (nSamples, nFeatures) with the data.
         eps : float
             Maximum distance between two samples for one to be considered as in the neighborhood of the other.
+            Its default value is 0.5.
 
         Returns
         -------
         NDArray[np.floating]
             Matrix of shape (nSamples, nearestNeighbors) with the nearest neighbors of each sample.
     """
+
     mmng: List[List[int]] = []
     for vec in params:
         vec_aux: List[int] = []
@@ -49,7 +51,7 @@ def inMat(graph: List[List[int]]) -> NDArray[np.floating]:
     """
     
     m = len(graph)
-    in_matrix = np.zeros((m, int((m-1)*m/2)))
+    inMatrix = np.zeros((m, int((m-1)*m/2)))
     for i in range(len(graph)):
         for j in graph[i]:
             if i == j:
@@ -61,9 +63,9 @@ def inMat(graph: List[List[int]]) -> NDArray[np.floating]:
                 pos = int(j*(2*m-j-3)/2 + i - 1)
                 val = -1
 
-            in_matrix[i][pos] = val
+            inMatrix[i][pos] = val
     
-    return in_matrix
+    return inMatrix
 #end inMat
 
 def matGen(X: NDArray[np.floating]) -> NDArray[np.floating]:
@@ -78,21 +80,23 @@ def matGen(X: NDArray[np.floating]) -> NDArray[np.floating]:
         Returns
         -------
         NDArray[np.floating]
-            Matrix of shape (nFeatures, nSamples) with distances.
+            Matrix of shape (nSamples, nSamples) with distances.
     """
 
     N: np.int64 = len(X)
-    y_fake = np.arange(N)
-    circuit = InnerProduct1R(X, y_fake)
     mat: NDArray[np.floating] = np.zeros((N, N))
+    
+    # Precompute squared norms of X
+    norms2 = np.array([np.linalg.norm(x)**2 for x in X])
 
     for i, rec in enumerate(X):
-        counts = circuit.qnode(rec)
+        circuit = InnerProduct1R(rec, X)
+        counts = circuit.qnode()
         p_vec = probs(counts, N)
         
         dists = np.array([])
         for j in range(N):
-            Z = circuit.norms2[j] + np.linalg.norm(rec)**2
+            Z = norms2[j] + np.linalg.norm(rec)**2
             dist_val = 4 * Z * (1 - p_vec[j])
             dists = np.append(dists, dist_val)
             

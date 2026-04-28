@@ -29,6 +29,7 @@ class QDBSCAN(Algorithm):
             minSamples : int
                 The number of samples (or total weight) in a neighborhood for a point to be considered as a core point.
         """
+
         self.eps = eps
         self.minSamples = minSamples
     #end __init__
@@ -41,14 +42,21 @@ class QDBSCAN(Algorithm):
             ----------
             params : NDArray[np.floating]
                 Data matrix of shape (nSamples, nFeatures).
-            is_mmng : bool
-                Whether the given matrix is a min-max neighborhood matrix.
+            paramsType : str
+                Type of the given matrix.
+                Options: 'data', 'mmng', 'distances'.
 
             Returns
             -------
             NDArray[np.floating]
                 Array of shape (nSamples,) with cluster labels.
+            
+            Raises
+            ------
+            ValueError
+                If paramsType is not 'data', 'mmng', or 'distances'.
         """
+
         if paramsType == 'data':
             dists = matGen(params)
             mmng_list = mmng(dists)
@@ -99,15 +107,15 @@ class QDBSCAN(Algorithm):
 #end QDBSCAN
 
 if __name__ == '__main__':
-    # X = pd.read_csv("/home/maninsch/Documentos/RAQun/instances.csv")
-    # X = X[:-1]
+    X = pd.read_csv("/home/elma/Documentos/RAQun/instances.csv")
+    X = X[:-1]
 
 
-    # mat = matGen(X.to_numpy())
+    mat = matGen(X.to_numpy())
 
-    # mmng = mmng(mat)
+    mmng = mmng(mat)
 
-    # print(f'La matriz de similitud es: \n{mat}\n\n\n\n\n\n')
+    print(f'La matriz de similitud es: \n{mat}\n\n\n\n\n\n')
     # print(f'El mmng es: \n{mmng}\n\n\n\n\n\n')
 
     pass

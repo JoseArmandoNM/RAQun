@@ -26,11 +26,11 @@ class VQE(Circuit):
             X : NDArray[np.floating]
                 Matrix of shape (nFeatures, nSamples) with the data.
         """
+
         self.X = (X + X.T)/2
         self.norm = np.linalg.norm(X, ord=2)
         self.X = self.X / self.norm
         self.X = padder(self.X)
-        # self.X = self.X + 0.5 * np.eye(self.X.shape[0])
         for i in range(self.X.shape[0]):
             for j in range(self.X.shape[0]):
                 if self.X[i][j] == 0:
@@ -41,7 +41,6 @@ class VQE(Circuit):
         self.n, self.log_n = log_t(X.shape[0])
         self.m, self.log_m = log_t(8)
         self.Q = ctrlGen(self.n, self.log_n)
-        # self.reg_A = list(range(self.log_m))
         self.reg_I = list(range(self.log_n))
         self.dev = qml.device(
             "default.qubit", 
@@ -64,12 +63,26 @@ class VQE(Circuit):
             float
                 Expectation value of the measurement of the circuit.
         """
+
         qml.StronglyEntanglingLayers(params, wires=self.reg_I[:])
 
         return qml.expval(self.H)
     #end run
 
     def getStateQnode(self, params: NDArray[np.floating]) -> NDArray[np.floating]:
+        """
+            Computes the quantum state after running the circuit.
+
+            Parameters
+            ----------
+            params : NDArray[np.floating]
+                Parameters of the circuit.
+
+            Returns
+            -------
+            NDArray[np.floating]
+                Quantum state.
+        """
         @qml.qnode(self.dev)
         def _circuit(p):
             qml.StronglyEntanglingLayers(p, wires=self.reg_I)
