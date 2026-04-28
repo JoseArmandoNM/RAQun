@@ -34,7 +34,7 @@ class InnerProduct(Circuit):
         self.Y = np.unique(self.labels)
         self.C, self.norms2 = self.train()
         
-        # Calculate number of qubits needed
+        
         self.log_c = int(np.ceil(np.log2(self.C.shape[0])))
         self.d, self.log_d = log_t(self.X.shape[1])
         

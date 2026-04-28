@@ -5,6 +5,7 @@ from RAQun.utils import mmng, inMat, matGen
 from RAQun.circuits import Eigen, VQE
 from RAQun.algorithms import QMeans
 import pandas as pd
+from pathlib import Path
 
 class QSC(Algorithm):
     """
@@ -103,7 +104,7 @@ class QSC(Algorithm):
 
 
 if __name__ == '__main__':
-    X = pd.read_csv("/home/elma/Documentos/RAQun/dataPrueba.csv")
+    X = pd.read_csv(Path(__file__).resolve().parents[2] / "dataPrueba.csv")
     X = X.drop(columns=['id','label']).values
     qsc = QSC(k=2, eps=1)
     labels = qsc.fit(X)
