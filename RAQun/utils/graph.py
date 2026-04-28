@@ -22,9 +22,9 @@ def mmng(params: NDArray[np.floating], eps: float = 0.5) -> List[List[int]]:
         NDArray[np.floating]
             Matrix of shape (nSamples, nearestNeighbors) with the nearest neighbors of each sample.
     """
-    mmng = []
+    mmng: List[List[int]] = []
     for vec in params:
-        vec_aux = []
+        vec_aux: List[int] = []
         for ix, val in enumerate(vec):
             if val <= eps:
                 vec_aux.append(ix)
@@ -33,7 +33,7 @@ def mmng(params: NDArray[np.floating], eps: float = 0.5) -> List[List[int]]:
     return mmng
 #end mmng
 
-def inMat(graph: NDArray[np.floating]) -> NDArray[np.floating]:
+def inMat(graph: List[List[int]]) -> NDArray[np.floating]:
     """
         Calculates the incidence matrix of the given graph.
 
@@ -55,10 +55,10 @@ def inMat(graph: NDArray[np.floating]) -> NDArray[np.floating]:
             if i == j:
                 continue
             elif i < j:
-                pos = int(i*(2*self.m-i-3)/2 + j - 1)
+                pos = int(i*(2*m-i-3)/2 + j - 1)
                 val = 1
             else:
-                pos = int(j*(2*self.m-j-3)/2 + i - 1)
+                pos = int(j*(2*m-j-3)/2 + i - 1)
                 val = -1
 
             in_matrix[i][pos] = val

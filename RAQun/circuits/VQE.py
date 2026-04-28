@@ -77,7 +77,7 @@ class VQE(Circuit):
         return _circuit(params)
     #end getStateQnode
 
-    def vqe_opt(self, iter: int) -> NDArray[np.floating]:
+    def vqe_opt(self, iter: int = 50) -> NDArray[np.floating]:
         """
             Optimizes the circuit using the VQE algorithm.
 

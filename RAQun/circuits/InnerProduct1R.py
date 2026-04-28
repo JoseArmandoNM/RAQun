@@ -65,7 +65,7 @@ class InnerProduct1R(Circuit):
         qml.Hadamard(wires=self.reg_A)
         
         for i, p in enumerate(self.P):
-            theta = 2 * np.arcsin(vec[i]/np.max(self.X))
+            theta = 2 * np.arcsin(np.clip(vec[i]/np.max(self.X), -1.0, 1.0))
             ctrl = p + '0'
             ctrl = [int(c) for c in ctrl]
             qml.ctrl(
@@ -76,7 +76,7 @@ class InnerProduct1R(Circuit):
             
         for j, q in enumerate(self.Q):
             for i, p in enumerate(self.P):
-                theta = 2 * np.arcsin(self.C[j][i]/np.max(self.X))
+                theta = 2 * np.arcsin(np.clip(self.C[j][i]/np.max(self.X), -1.0, 1.0))
                 ctrl = q + p + '1'
                 ctrl = [int(c) for c in ctrl]
                 qml.ctrl(

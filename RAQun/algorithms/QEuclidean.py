@@ -66,7 +66,6 @@ class QEuclidean(Algorithm):
                 Array of shape (nSamples,) with predicted class for each sample.
         """
         probsVec = probs(self.circuit.qnode(vec), 2)
-        print(probsVec)
         
         dists: list = list([])
         for i in range(self.circuit.C.shape[0]):
