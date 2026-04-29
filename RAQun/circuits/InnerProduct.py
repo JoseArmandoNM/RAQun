@@ -33,21 +33,30 @@ class InnerProduct(Circuit):
         self.vecs = vecs
         
         
-        self.log_c = int(np.ceil(np.log2(self.vecs.shape[0])))
-        self.d, self.log_d = log_t(self.vecs.shape[1])
+        self.logC = int(np.ceil(np.log2(self.vecs.shape[0])))
+        self.d, self.logD = log_t(self.vecs.shape[1])
         
-        self.Q = ctrlGen(self.vecs.shape[0], self.log_c)
+        self.Q = ctrlGen(self.vecs.shape[0], self.logC)
         
         self.dev = qml.device(
             "lightning.qubit", 
-            wires=self.log_c + 2 * self.log_d + 1
+            wires=self.logC + 2 * self.logD + 1
         )
         self.qnode = qml.QNode(self.run, self.dev, shots=10024)
         
-        self.reg_J = [i for i in range(self.log_c)]
-        self.reg_U = [i for i in range(self.log_c, self.log_c + self.log_d)]
-        self.reg_V = [i for i in range(self.log_c + self.log_d, self.log_c + 2 * self.log_d)]
-        self.reg_A = [i for i in range(self.log_c + 2 * self.log_d, self.log_c + 2 * self.log_d + 1)]
+        self.regJ = [i for i in range(self.logC)]
+        self.regU = [i for i in range(
+            self.logC, 
+            self.logC + self.logD
+        )]
+        self.regV = [i for i in range(
+            self.logC + self.logD, 
+            self.logC + 2 * self.logD
+        )]
+        self.regA = [i for i in range(
+            self.logC + 2 * self.logD, 
+            self.logC + 2 * self.logD + 1
+        )]
     #end __init__
 
     def normalize(self, vec: NDArray[np.floating]) -> NDArray[np.floating]:
@@ -62,10 +71,10 @@ class InnerProduct(Circuit):
             Returns
             -------
             NDArray[np.floating]
-                Normalized vector padded to 2**log_d size.
+                Normalized vector padded to 2**logD size.
         """
 
-        vec = np.pad(vec, (0, 2**self.log_d - vec.size), mode='constant')
+        vec = np.pad(vec, (0, 2**self.logD - vec.size), mode='constant')
         vec = vec / np.linalg.norm(vec)
         return vec
     #end normalize
@@ -97,29 +106,29 @@ class InnerProduct(Circuit):
 
         x: NDArray[np.float64] = self.normalize(self.vec)
 
-        for i in self.reg_J:
+        for i in self.regJ:
             qml.Hadamard(wires=i)
         
-        for i in self.reg_A:
+        for i in self.regA:
             qml.Hadamard(wires=i)
         
-        self.initialize(x, self.reg_U)
+        self.initialize(x, self.regU)
         
         for i, q in enumerate(self.Q):
             q = [int(c) for c in q]
             qml.ctrl(
                 self.initialize,
-                control=self.reg_J,
-                control_values=q 
-            )(self.vecs[i], wires=self.reg_V)
+                control=self.regJ,
+                control_values=q
+            )(self.vecs[i], wires=self.regV)
 
-        for i in self.reg_U:
-            qml.CSWAP(wires=[self.reg_A[0], i, i+self.log_d])
+        for i in self.regU:
+            qml.CSWAP(wires=[self.regA[0], i, i+self.logD])
         
-        for i in self.reg_A:
+        for i in self.regA:
             qml.Hadamard(wires=i)
         
-        return qml.counts(wires=self.reg_J[:] + self.reg_A[:])
+        return qml.counts(wires=self.regJ[:] + self.regA[:])
     #end run
 #end InnerProduct
 

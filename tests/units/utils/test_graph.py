@@ -26,13 +26,12 @@ def test_inMat():
 def test_matGen(mock_probs, mock_InnerProduct1R):
     mock_circuit = mock_InnerProduct1R.return_value
     mock_circuit.qnode.return_value = {'00': 1}
-    mock_circuit.norms2 = np.array([1.0, 2.0])
     
     mock_probs.return_value = np.array([0.5, 0.5])
     
     X = np.array([[1.0, 0.0], [0.0, 1.0]])
     res = matGen(X)
     
-    expected = np.array([[4.0, 6.0], [4.0, 6.0]])
+    expected = np.array([[4.0, 4.0], [4.0, 4.0]])
     np.testing.assert_array_equal(res, expected)
 #end test_matGen

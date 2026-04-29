@@ -25,20 +25,20 @@ def test_log_t():
 def test_dist_hadamard():
     p = np.array([0.5, 0.25])
     norms = np.array([1.0, 2.0, 3.0])
-    res = dist(p, method='hadamard', norms2=norms)
+    res = dist(p, method='hadamard', vecs=norms)
     np.testing.assert_array_almost_equal(res, np.array([2.0, 3.0]))
 #end test_dist_hadamard
 
 def test_dist_swap():
     p = np.array([0.5, 0.25])
     norms = np.array([1.0, 2.0, 3.0])
-    res = dist(p, method='swap', norms2=norms)
+    res = dist(p, method='swap', vecs=norms)
     np.testing.assert_array_almost_equal(res, np.array([6.0, 12.0]))
 #end test_dist_swap
 
 def test_dist_invalid_method():
     with pytest.raises(ValueError):
-        dist(np.array([0.5]), method='invalid', norms2=np.array([1.0, 1.0]))
+        dist(np.array([0.5]), method='invalid', vecs=np.array([1.0, 1.0]))
 #end test_dist_invalid_method
 
 def test_probs():

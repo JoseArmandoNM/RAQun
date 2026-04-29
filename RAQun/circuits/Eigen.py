@@ -36,14 +36,14 @@ class Eigen(Circuit):
                 if self.X[i][j] == 0:
                     self.X[i][j] = 1e-10
         self.shots = 1024
-        self.n, self.log_n = log_t(X.shape[0])
-        self.m, self.log_m = log_t(500)
-        self.Q = ctrlGen(self.n, self.log_n)
-        self.reg_A = list(range(self.log_m))
-        self.reg_I = list(range(self.log_m, self.log_m + self.log_n))
+        self.n, self.logN = log_t(X.shape[0])
+        self.m, self.logM = log_t(500)
+        self.Q = ctrlGen(self.n, self.logN)
+        self.regA = list(range(self.logM))
+        self.regI = list(range(self.logM, self.logM + self.logN))
         self.dev = qml.device(
             "default.qubit", 
-            wires = len(self.reg_A) + len(self.reg_I)
+            wires = len(self.regA) + len(self.regI)
         )
         self.qnode = qml.QNode(
             self.run, 
@@ -63,27 +63,27 @@ class Eigen(Circuit):
                 Counts of the measurement of the circuit.
         """
 
-        for i in self.reg_A:
+        for i in self.regA:
             qml.Hadamard(wires = i)
         
-        for j, i in enumerate(self.reg_I):
+        for j, i in enumerate(self.regI):
             qml.RY(0.1 + 0.2 * j, wires=i)
 
-        for i in self.reg_I:
+        for i in self.regI:
             qml.Hadamard(wires = i)
 
-        for i in range(len(self.reg_A)):
-            t_evol = 2 ** i
+        for i in range(len(self.regA)):
+            tEvol = 2 ** i
             qml.ctrl(
                 self.oracle, 
-                control = self.reg_A[i]
+                control = self.regA[i]
             )(
-                t_evol, 
-                wires = self.reg_I[:]
+                tEvol, 
+                wires = self.regI[:]
             )
 
-        qml.adjoint(qml.QFT)(wires = self.reg_A[:])
-        return qml.counts(wires=self.reg_A[:]+self.reg_I[:])
+        qml.adjoint(qml.QFT)(wires = self.regA[:])
+        return qml.counts(wires=self.regA[:]+self.regI[:])
     #end run
 
     def oracle(self, t: int, wires: list) -> Any:
@@ -118,7 +118,7 @@ class Eigen(Circuit):
         mat = []
 
         for _ in range(2*k):
-            kAux = _*2**self.log_n
+            kAux = _*2**self.logN
             pAux = p[kAux: kAux + self.n]
             mat.append(pAux)
         
@@ -130,7 +130,7 @@ class Eigen(Circuit):
     def probs(self) -> dict:
         probs = self.qnode()
         probsAux = {}
-        k = self.log_m + self.log_n
+        k = self.logM + self.logN
         states = ctrlGen(2**k, k)
         for s in states:
             if s in probs.keys():

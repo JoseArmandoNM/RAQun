@@ -38,13 +38,13 @@ class VQE(Circuit):
         self.shots = None
         self.H = qml.pauli_decompose(self.X)
         self.H.grouping_indices = None
-        self.n, self.log_n = log_t(X.shape[0])
-        self.m, self.log_m = log_t(8)
-        self.Q = ctrlGen(self.n, self.log_n)
-        self.reg_I = list(range(self.log_n))
+        self.n, self.logN = log_t(X.shape[0])
+        self.m, self.logM = log_t(8)
+        self.Q = ctrlGen(self.n, self.logN)
+        self.regI = list(range(self.logN))
         self.dev = qml.device(
             "default.qubit", 
-            wires = len(self.reg_I)
+            wires = len(self.regI)
         )
         self.qnode = qml.QNode(
             self.run, 
@@ -64,7 +64,7 @@ class VQE(Circuit):
                 Expectation value of the measurement of the circuit.
         """
 
-        qml.StronglyEntanglingLayers(params, wires=self.reg_I[:])
+        qml.StronglyEntanglingLayers(params, wires=self.regI[:])
 
         return qml.expval(self.H)
     #end run
@@ -85,12 +85,12 @@ class VQE(Circuit):
         """
         @qml.qnode(self.dev)
         def _circuit(p):
-            qml.StronglyEntanglingLayers(p, wires=self.reg_I)
+            qml.StronglyEntanglingLayers(p, wires=self.regI)
             return qml.probs()
         return _circuit(params)
     #end getStateQnode
 
-    def vqe_opt(self, iter: int = 50) -> NDArray[np.floating]:
+    def vqeOpt(self, iter: int = 50) -> NDArray[np.floating]:
         """
             Optimizes the circuit using the VQE algorithm.
 
@@ -105,7 +105,7 @@ class VQE(Circuit):
                 Vector of shape (nFeatures,) with the optimal parameters.
         """
         layers = 2
-        shape = qml.StronglyEntanglingLayers.shape(n_layers= layers, n_wires = self.log_n)
+        shape = qml.StronglyEntanglingLayers.shape(n_layers = layers, n_wires = self.logN)
         params = np.random.random(size=shape, requires_grad = True)
         opt = qml.GradientDescentOptimizer(stepsize = 0.1)
         for i in range(iter):
@@ -113,10 +113,10 @@ class VQE(Circuit):
             if i % 10 == 0:
                 print (f'Iteración: {i}')
         
-        qml.StronglyEntanglingLayers(params, wires=self.reg_I[:])
+        qml.StronglyEntanglingLayers(params, wires=self.regI[:])
 
         autovector = self.getStateQnode(params)
 
         return autovector
-    #end vqe_opt
+    #end vqeOpt
 #end VQE

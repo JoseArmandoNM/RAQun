@@ -32,23 +32,23 @@ class InnerProduct1R(Circuit):
         self.vec = vec
         self.vecs = vecs
         
-        self.log_k = int(np.ceil(np.log2(self.vecs.shape[0])))
-        self.n, self.log_n = log_t(self.vecs.shape[0])
-        self.d, self.log_d = log_t(self.vecs.shape[1])
+        self.logK = int(np.ceil(np.log2(self.vecs.shape[0])))
+        self.n, self.logN = log_t(self.vecs.shape[0])
+        self.d, self.logD = log_t(self.vecs.shape[1])
         
-        self.P = ctrlGen(self.d, self.log_d)
-        self.Q = ctrlGen(self.vecs.shape[0], self.log_k)
+        self.P = ctrlGen(self.d, self.logD)
+        self.Q = ctrlGen(self.vecs.shape[0], self.logK)
         
         self.dev = qml.device(
             "lightning.qubit", 
-            wires=self.log_k + self.log_d + 2
+            wires=self.logK + self.logD + 2
         )
         self.qnode = qml.QNode(self.run, self.dev, shots=1024)
         
-        self.reg_J = [i for i in range(self.log_k)]
-        self.reg_I = [i for i in range(self.log_k, self.log_k + self.log_d)]
-        self.reg_V = self.log_k + self.log_d
-        self.reg_A = self.log_k + self.log_d + 1
+        self.regJ = [i for i in range(self.logK)]
+        self.regI = [i for i in range(self.logK, self.logK + self.logD)]
+        self.regV = self.logK + self.logD
+        self.regA = self.logK + self.logD + 1
     #end __init__
 
     def run(self) -> dict:
@@ -61,21 +61,19 @@ class InnerProduct1R(Circuit):
                 Counts of the measurement of the circuit.
         """
 
-        nn: NDArray[np.float64] = np.array([])
-
-        for i in self.reg_J:
+        for i in self.regJ:
             qml.Hadamard(wires=i)
-        for i in self.reg_I:
+        for i in self.regI:
             qml.Hadamard(wires=i)
-        qml.Hadamard(wires=self.reg_A)
+        qml.Hadamard(wires=self.regA)
         
         for i, p in enumerate(self.P):
             theta = 2 * np.arcsin(np.clip(self.vec[i]/np.max(self.vecs), -1.0, 1.0))
             ctrl = p + '0'
             ctrl = [int(c) for c in ctrl]
             qml.ctrl(
-                qml.RY(theta, wires=self.reg_V), 
-                control=self.reg_I[:]+[self.reg_A], 
+                qml.RY(theta, wires=self.regV), 
+                control=self.regI[:]+[self.regA], 
                 control_values=ctrl
             )
             
@@ -85,14 +83,14 @@ class InnerProduct1R(Circuit):
                 ctrl = q + p + '1'
                 ctrl = [int(c) for c in ctrl]
                 qml.ctrl(
-                    qml.RY(theta, wires=self.reg_V), 
-                    control=self.reg_J[:]+self.reg_I[:]+[self.reg_A], 
+                    qml.RY(theta, wires=self.regV), 
+                    control=self.regJ[:]+self.regI[:]+[self.regA], 
                     control_values=ctrl
                 )
 
-        qml.Hadamard(wires=self.reg_A)
+        qml.Hadamard(wires=self.regA)
         
-        return qml.counts(wires=self.reg_J[::]+[self.reg_A])
+        return qml.counts(wires=self.regJ[::]+[self.regA])
     #end run
 #end InnerProduct1R
 

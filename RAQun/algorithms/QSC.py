@@ -80,7 +80,7 @@ class QSC(Algorithm):
         if self.eigen == 'qpe':
             vecs = Eigen(L).vectors(self.k)
         elif self.eigen == 'vqe':
-            vecs = VQE(L).vqe_opt()
+            vecs = VQE(L).vqeOpt()
         else:
             vals, vecs = np.linalg.eigh(L)
             vecs = vecs[:, :self.k]
