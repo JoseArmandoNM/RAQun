@@ -12,10 +12,10 @@ class InnerProduct1R(Circuit):
 
         Parameters
         ----------
-        X : NDArray[np.floating]
+        vec : NDArray[np.floating]
+            Vector of shape (nFeatures,).
+        vecs : NDArray[np.floating]
             Matrix of shape (nSamples, nFeatures) with the data.
-        y : NDArray[np.floating]
-            Vector of shape (nSamples,) with the label.
     """
     
     def __init__(self, vec: NDArray[np.floating], vecs: NDArray[np.floating]) -> None:

@@ -13,8 +13,8 @@ class QHAC(Algorithm):
         ----------
         k : int
             Number of clusters.
-        isSim : bool
-            Whether to use parametes as a similarity matrix or data matrix.
+        paramType : str
+            Type of the parameters, must be 'data' or 'similarity'.
     """
     
     def __init__(self, k: int = 2, paramType: str = 'data') -> None:
@@ -40,8 +40,9 @@ class QHAC(Algorithm):
 
             Parameters
             ----------
-            X : NDArray[np.floating]
-                Data matrix of shape (nSamples, nFeatures).
+            params : NDArray[np.floating]
+                If paramType is 'data', the matrix is of shape (nSamples, nFeatures).
+                If paramType is 'similarity', the matrix is of shape (nSamples, nSamples).
             link : str
                 Linkages to use in GAS.
 

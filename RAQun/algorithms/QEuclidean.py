@@ -10,10 +10,9 @@ class QEuclidean(Algorithm):
 
         Parameters
         ----------
-        X : NDArray[np.floating]
-            Data matrix of shape (nSamples, nFeatures).
-        y : NDArray[np.floating]
-            Labels of shape (nSamples).
+        metric : str
+            Metric to use for the quantum circuit.
+            Options are 'hadamard' or 'swap'.
     """
 
     def __init__(self, metric: str = "hadamard") -> None:
@@ -24,7 +23,7 @@ class QEuclidean(Algorithm):
             ----------
             metric : str
                 Metric to use for the quantum circuit.
-                Options: 'hadamard' or 'swap'.
+                Options are 'hadamard' or 'swap'.
         """
 
         self.metric = metric.lower()
