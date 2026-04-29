@@ -59,11 +59,11 @@ class QDBSCAN(Algorithm):
 
         if paramsType == 'data':
             dists = matGen(params)
-            mmng_list = mmng(dists)
+            mmng_list = mmng(dists, eps=self.eps)
         elif paramsType == 'mmng':
             mmng_list = params
         elif paramsType == 'distances':
-            mmng_list = mmng(params)
+            mmng_list = mmng(params, eps=self.eps)
         else:
             raise ValueError(f'Params type {paramsType} not recognized.')
 
