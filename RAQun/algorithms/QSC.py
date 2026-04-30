@@ -3,8 +3,9 @@ import numpy as np
 from numpy.typing import NDArray
 from RAQun.utils import mmng, inMat, matGen
 from RAQun.circuits import Eigen, VQE
-from RAQun.algorithms import QMeans
+from RAQun.algorithms.QMeans import QMeans
 import pandas as pd
+from typing import List, cast
 from pathlib import Path
 
 class QSC(Algorithm):
@@ -39,11 +40,11 @@ class QSC(Algorithm):
 
         self.k = k
         self.eps = eps
-        paramOptions: list = ['data', 'mmng', 'similarity', 'inMatrix']
+        paramOptions: List[str] = ['data', 'mmng', 'similarity', 'inMatrix']
         if paramType not in paramOptions:
             raise ValueError(f"paramType must be one of {paramOptions}")
         self.paramType = paramType
-        eigOptions: list = ['classical', 'qpe', 'vqe']
+        eigOptions: List[str] = ['classical', 'qpe', 'vqe']
         if eigen not in eigOptions:
             raise ValueError(f"eigen must be one of {eigOptions}")
         self.eigen = eigen
@@ -65,16 +66,16 @@ class QSC(Algorithm):
         """
         self.m = len(params)
         if self.paramType == 'data':
-            sim = matGen(params)
+            sim = matGen(cast(NDArray[np.floating], params))
             graph = mmng(sim, self.eps)
             self.B = inMat(graph)
         elif self.paramType == 'similarity':
-            graph = mmng(params, self.eps)
+            graph = mmng(cast(NDArray[np.floating], params), self.eps)
             self.B = inMat(graph)
         elif self.paramType == 'mmng':
-            self.B = inMat(params)
+            self.B = inMat(cast(List[List[int]], params))
         elif self.paramType == 'inMatrix':
-            self.B = params
+            self.B = cast(NDArray[np.floating], params)
         
         L = self.B @ self.B.T
         if self.eigen == 'qpe':

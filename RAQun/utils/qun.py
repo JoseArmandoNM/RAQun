@@ -30,7 +30,7 @@ def ctrlGen(d: int, logd: int) -> NDArray[np.str_]:
         p = ''.join(str(_) for _ in B)
         P.append(p)
 
-    return P
+    return np.array(P)
 #end ctrlGen
 
 def padder(X: NDArray[np.floating]) -> NDArray[np.floating]:

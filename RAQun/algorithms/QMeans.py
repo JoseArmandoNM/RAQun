@@ -2,7 +2,7 @@ from RAQun.algorithms.base import Algorithm
 from RAQun.algorithms.QEuclidean import QEuclidean
 import numpy as np
 from numpy.typing import NDArray
-import pandas as pd
+from typing import List, Any
 
 class QMeans(Algorithm):
     """
@@ -33,7 +33,7 @@ class QMeans(Algorithm):
 
         self.k: int = k
         self.maxIters: int = maxIters
-        self.history: list = [] 
+        self.history: List[NDArray[np.floating]] = [] 
         self.metric = metric.lower()
         if self.metric not in ['hadamard', 'quantum']:
             raise ValueError(f'Metric {metric} not recognized.')
@@ -54,7 +54,7 @@ class QMeans(Algorithm):
                 Array of shape (nSamples,) with cluster labels.
         """
         n = X.shape[0]
-        current_labels = np.random.randint(0, self.k, size=n)
+        current_labels: NDArray[np.floating] = np.array(np.random.choice(self.k, size=n), dtype=np.float64)
         
         for i in range(self.maxIters):
             classifier: QEuclidean = QEuclidean(self.metric)
@@ -63,7 +63,7 @@ class QMeans(Algorithm):
             changes: int = 0
 
             for i, x in enumerate(X):
-                predictedLabel: np.floating = classifier.predict(x)
+                predictedLabel: Any = classifier.predict(x)
                 newLabels[i] = predictedLabel
                 if predictedLabel != current_labels[i]:
                     changes += 1
@@ -77,9 +77,12 @@ class QMeans(Algorithm):
     #end fit
 #end QMeans
 
+'''
 if __name__ == '__main__':
+    import pandas as pd
     X = pd.read_csv("/home/elma/Documentos/RAQun/dataPrueba.csv")
     X = X.drop(columns=['id', 'label']).values
     qmeans = QMeans(k=2)
     labels = qmeans.fit(X)
     print(labels)
+'''

@@ -1,5 +1,5 @@
 from RAQun.circuits import Circuit
-from typing import Dict
+from typing import Dict, Any, List
 import pennylane as qml
 from pennylane import numpy as np
 from numpy.typing import NDArray
@@ -51,7 +51,7 @@ class InnerProduct1R(Circuit):
         self.regA = self.logK + self.logD + 1
     #end __init__
 
-    def run(self) -> dict:
+    def run(self) -> Dict[str, Any] | Any:
         """
             Calculates the counts of the measurement of the circuit.
 

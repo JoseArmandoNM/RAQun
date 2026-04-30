@@ -1,9 +1,9 @@
 from RAQun.algorithms.base import Algorithm
 import numpy as np
 from numpy.typing import NDArray
+from typing import cast, List
 from RAQun.circuits import InnerProduct, InnerProduct1R
 from RAQun.utils.graph import mmng, matGen
-import pandas as pd
 from collections import deque
 
 class QDBSCAN(Algorithm):
@@ -61,7 +61,7 @@ class QDBSCAN(Algorithm):
             dists = matGen(params)
             mmng_list = mmng(dists, eps=self.eps)
         elif paramsType == 'mmng':
-            mmng_list = params
+            mmng_list = cast(List[List[int]], params)
         elif paramsType == 'distances':
             mmng_list = mmng(params, eps=self.eps)
         else:
@@ -102,11 +102,13 @@ class QDBSCAN(Algorithm):
         for _ in clusters:
             print(len(_))
 
-        return labels
+        return cast(NDArray[np.floating], np.array(labels, dtype=np.float64))
     #end fit
 #end QDBSCAN
 
+'''
 if __name__ == '__main__':
+    import pandas as pd
     X = pd.read_csv("/home/elma/Documentos/RAQun/instances.csv")
     X = X[:-1]
 
@@ -119,3 +121,4 @@ if __name__ == '__main__':
     # print(f'El mmng es: \n{mmng}\n\n\n\n\n\n')
 
     pass
+'''

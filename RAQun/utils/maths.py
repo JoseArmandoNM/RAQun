@@ -40,7 +40,7 @@ def log_t(num: int) -> tuple[int, int]:
     return num, int(np.ceil(np.log2(num))) if num > 1 else 1
 #end log_t
 
-def dist(probs: NDArray[np.floating], method: str = 'hadamard', vecs: NDArray[np.floating] = None) -> NDArray[np.floating]:
+def dist(probs: NDArray[np.floating], method: str = 'hadamard', vecs: NDArray[np.floating] = np.array([])) -> NDArray[np.floating]:
     """
         Calculates the Euclidean distance between two vectors.
 
@@ -101,8 +101,8 @@ def probs(counts: dict[str, int], nStates: int) -> NDArray[np.floating]:
     """
     probs = np.array([], dtype=np.float64)
     
-    counts_idx = {}
-    counts_match = {}
+    counts_idx: Dict[int, int] = {}
+    counts_match: Dict[int, int] = {}
     
     for bit_string, count in counts.items():
         idx_bits = bit_string[:-1]

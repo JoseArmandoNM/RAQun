@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Any
 
 class Circuit(ABC):
     """
@@ -6,7 +7,7 @@ class Circuit(ABC):
     """
 
     @abstractmethod
-    def run(self, *args, **kwargs):
+    def run(self, *args: Any, **kwargs: Any) -> Any:
         """
             Execute the circuit with the given inputs.
             This method must be implemented by subclasses to define the circuit's execution logic.
@@ -23,10 +24,10 @@ class Circuit(ABC):
             Any
                 The result of the circuit execution.
         """
-        pass
+        raise NotImplementedError("Subclasses must implement this method")
     #end run
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args: Any, **kwargs: Any) -> Any:
         """
             Call the circuit as a function.
             This method allows instances of the class to be invoked directly, forwarding all arguments to the `run` method.

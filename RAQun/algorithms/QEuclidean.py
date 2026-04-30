@@ -2,7 +2,8 @@ from RAQun.algorithms.base import Algorithm
 from RAQun.circuits import InnerProduct, InnerProduct1R
 from RAQun.utils.maths import probs
 import numpy as np
-import pandas as pd
+from numpy.typing import NDArray
+from typing import List, Any
 
 class QEuclidean(Algorithm):
     """
@@ -31,7 +32,7 @@ class QEuclidean(Algorithm):
             raise ValueError("Metric not supported. Use 'hadamard' or 'swap'.")
     #end __init__
 
-    def fit(self, X: NDArray[np.floating], y: NDArray[np.floating]) -> None:
+    def fit(self, X: NDArray[np.floating], y: NDArray[np.floating]) -> Any: # type: ignore[override]
         """
             Trains the model with the given matrix data and labels vector.
 
@@ -64,7 +65,7 @@ class QEuclidean(Algorithm):
         self.normas = normas
     #end fit
 
-    def predict(self, vec: NDArray[np.floating]) -> NDArray[np.floating]:
+    def predict(self, vec: NDArray[np.floating]) -> Any:
         """
             Predicts the class of each sample in the data matrix.
 
@@ -82,20 +83,23 @@ class QEuclidean(Algorithm):
         
         probsVec = probs(self.circuit.qnode(), self.centroids.shape[0])
         
-        dists: list = list([])
+        dists: List[float] = []
         for i in range(self.centroids.shape[0]):
             Z: np.float64 = (self.normas[i] + np.linalg.norm(vec) ** 2)
             dist: np.float64 = 4 * Z * (1 - probsVec[i]) 
-            dists.append(dist)
+            dists.append(float(dist))
 
-        dists = np.array(dists)
+        dists_arr = np.array(dists)
 
-        i: np.int64 = np.argmin(dists)
-        return self.Y[i]
+        min_idx: np.int64 = np.argmin(dists_arr)
+        return self.Y[min_idx]
     #end predict
 #end QEuclidean
 
+
+'''
 if __name__ == '__main__':
+    import pandas as pd
     X = pd.read_csv("/home/elma/Documentos/RAQun/instances.csv")
     y = X.iloc[:, -1].to_numpy()
     X = X.iloc[:, :-1].to_numpy()
@@ -105,3 +109,4 @@ if __name__ == '__main__':
 
     for i in range(X.shape[0]):
         print(f"Label: {y[i]}, Predicted: {model.predict(X[i])}")
+'''

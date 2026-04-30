@@ -1,5 +1,5 @@
 from RAQun.circuits import Circuit
-from typing import Dict
+from typing import Dict, Any
 import pennylane as qml
 from pennylane import numpy as np
 from numpy.typing import NDArray
@@ -54,13 +54,13 @@ class VQE(Circuit):
         self.max = np.max(self.X)
     #end __init__
 
-    def run(self, params: NDArray[np.floating]) -> float:
+    def run(self, params: NDArray[np.floating]) -> Any:
         """
             Calculates the expectation value of the measurement of the circuit.
 
             Returns
             -------
-            float
+            Any
                 Expectation value of the measurement of the circuit.
         """
 
@@ -69,7 +69,7 @@ class VQE(Circuit):
         return qml.expval(self.H)
     #end run
 
-    def getStateQnode(self, params: NDArray[np.floating]) -> NDArray[np.floating]:
+    def getStateQnode(self, params: NDArray[np.floating]) -> Any:
         """
             Computes the quantum state after running the circuit.
 
@@ -83,14 +83,14 @@ class VQE(Circuit):
             NDArray[np.floating]
                 Quantum state.
         """
-        @qml.qnode(self.dev)
-        def _circuit(p):
+        @qml.qnode(self.dev)#type: ignore
+        def _circuit(p: NDArray[np.floating]) -> Any:
             qml.StronglyEntanglingLayers(p, wires=self.regI)
             return qml.probs()
         return _circuit(params)
     #end getStateQnode
 
-    def vqeOpt(self, iter: int = 50) -> NDArray[np.floating]:
+    def vqeOpt(self, iter: int = 50) -> Any:
         """
             Optimizes the circuit using the VQE algorithm.
 

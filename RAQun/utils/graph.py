@@ -1,4 +1,4 @@
-from typing import Tuple, List, Dict
+from typing import Tuple, List, Dict, Any
 import numpy as np
 from numpy.typing import NDArray
 
@@ -83,21 +83,20 @@ def matGen(X: NDArray[np.floating]) -> NDArray[np.floating]:
             Matrix of shape (nSamples, nSamples) with distances.
     """
 
-    N: np.int64 = len(X)
+    N: int = len(X)
     mat: NDArray[np.floating] = np.zeros((N, N))
     
-    # Precompute squared norms of X
-    norms2 = np.array([np.linalg.norm(x)**2 for x in X])
+    norms2: NDArray[np.floating] = np.array([np.linalg.norm(x)**2 for x in X])
 
     for i, rec in enumerate(X):
         circuit = InnerProduct1R(rec, X)
-        counts = circuit.qnode()
-        p_vec = probs(counts, N)
+        counts: Dict[str, Any] = circuit.qnode()
+        p_vec: NDArray[Any] = probs(counts, N)
         
-        dists = np.array([])
+        dists: NDArray[np.floating] = np.array([])
         for j in range(N):
-            Z = norms2[j] + np.linalg.norm(rec)**2
-            dist_val = 4 * Z * (1 - p_vec[j])
+            Z: float = norms2[j] + np.linalg.norm(rec)**2
+            dist_val: float = 4 * Z * (1 - p_vec[j])
             dists = np.append(dists, dist_val)
             
         mat[i] = dists

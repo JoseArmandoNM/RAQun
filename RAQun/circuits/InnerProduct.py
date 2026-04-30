@@ -1,5 +1,5 @@
 from RAQun.circuits import Circuit
-from typing import Dict
+from typing import Dict, List, Any
 import pennylane as qml
 from pennylane import numpy as np
 from numpy.typing import NDArray
@@ -79,7 +79,7 @@ class InnerProduct(Circuit):
         return vec
     #end normalize
 
-    def initialize(self, C: NDArray[np.floating], wires: list) -> None:
+    def initialize(self, C: NDArray[np.floating], wires: List[int]) -> None:
         """
             Initializes the quantum states using amplitude encoding.
 
@@ -94,7 +94,7 @@ class InnerProduct(Circuit):
         qml.StatePrep(self.normalize(C), wires=wires)
     #end initialize
 
-    def run(self) -> dict:
+    def run(self) -> Any:
         """
             Calculates the counts of the measurement of the circuit.
 

@@ -1,5 +1,5 @@
 from RAQun.circuits import Circuit
-from typing import Dict
+from typing import Dict, Any, List
 import pennylane as qml
 from pennylane import numpy as np
 from numpy.typing import NDArray
@@ -53,7 +53,7 @@ class Eigen(Circuit):
         self.max = np.max(self.X)
     #end __init__
 
-    def run(self) -> dict:
+    def run(self) -> Any:
         """
             Calculates the counts of the measurement of the circuit.
 
@@ -86,7 +86,7 @@ class Eigen(Circuit):
         return qml.counts(wires=self.regA[:]+self.regI[:])
     #end run
 
-    def oracle(self, t: int, wires: list) -> Any:
+    def oracle(self, t: int, wires: List[int]) -> Any:
         """
             Oracle that implements the unitary operator U.
 
@@ -114,22 +114,22 @@ class Eigen(Circuit):
                 Matrix of shape (nFeatures, k) with the eigenvectors.
         """
 
-        p = list(self.probs().values())
-        mat = []
+        p: List[float] = list(self.probs().values())
+        mat: List[List[int]] = []
 
         for _ in range(2*k):
             kAux = _*2**self.logN
-            pAux = p[kAux: kAux + self.n]
+            pAux: List[Any] = p[kAux: kAux + self.n]
             mat.append(pAux)
         
-        vecs = np.array(mat)
-
-        return np.transpose(vecs)
+        vecs: NDArray[np.floating] = np.array(mat)
+        resul: NDArray[np.floating] = np.transpose(vecs)
+        return resul
     #end vectors
 
-    def probs(self) -> dict:
-        probs = self.qnode()
-        probsAux = {}
+    def probs(self) -> Dict[str, Any]:
+        probs: Dict[str, Any] = self.qnode()
+        probsAux: Dict[str, Any] = {}
         k = self.logM + self.logN
         states = ctrlGen(2**k, k)
         for s in states:

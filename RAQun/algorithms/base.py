@@ -1,12 +1,13 @@
 from abc import ABC, abstractmethod
+from typing import Any, Dict
 
 class Algorithm(ABC):
     """
     Defines a common interface for algorithm-like objects
     """
-
+    labels_: Any
     @abstractmethod
-    def fit(self, X):
+    def fit(self, X: Any) -> Any:
         """
             Fit the algorithm to the data.
 
@@ -15,10 +16,10 @@ class Algorithm(ABC):
             X : NDArray[np.floating]
                 Matrix of shape (nFeatures, nSamples) with the data.
         """
-        pass
+        raise NotImplementedError("Subclasses must implement this method")
     #end fit
 
-    def fit_predict(self, X):
+    def fit_predict(self, X: Any) -> Any:
         """
             Fit the algorithm to the data and return the labels.
 
@@ -36,7 +37,7 @@ class Algorithm(ABC):
         return self.labels_
     #end fit_predict
 
-    def get_params(self):
+    def get_params(self) -> Dict[str, Any]:
         """
             Get the parameters of the algorithm.
 
@@ -48,7 +49,7 @@ class Algorithm(ABC):
         return self.__dict__
     #end get_params
 
-    def set_params(self, **params):
+    def set_params(self, **params: Any) -> 'Algorithm':
         """
             Set the parameters of the algorithm.
 
