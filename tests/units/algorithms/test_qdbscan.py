@@ -1,8 +1,8 @@
-from RAQun.algorithms import QDBSCAN
+from raqun.algorithms import QDBSCAN
 import numpy as np
 from unittest.mock import patch
 
-@patch('RAQun.algorithms.QDBSCAN.matGen')
+@patch('raqun.algorithms.QDBSCAN.matGen')
 def test_qdbscan(mock_matGen):
     mock_matGen.return_value = np.array([
         [0, 2, 2, 9, 9, 9],

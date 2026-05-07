@@ -1,7 +1,7 @@
-from RAQun.algorithms.base import Algorithm
+from raqun.algorithms.base import Algorithm
 import numpy as np
 from numpy.typing import NDArray
-from RAQun.utils import matGen
+from raqun.utils import matGen
 import pandas as pd
 from sklearn.cluster import AgglomerativeClustering
 
@@ -67,7 +67,7 @@ class QHAC(Algorithm):
         return clusters
     #end fit
 
-# X = pd.read_csv("/home/elma/Documentos/RAQun/instances.csv", delimiter=",").iloc[:, :-1].to_numpy()
+# X = pd.read_csv("/home/elma/Documentos/raqun/instances.csv", delimiter=",").iloc[:, :-1].to_numpy()
 
 # h = QHAC()
 

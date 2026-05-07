@@ -2,8 +2,8 @@ from typing import Tuple, List, Dict, Any
 import numpy as np
 from numpy.typing import NDArray
 
-from RAQun.circuits.InnerProduct1R import InnerProduct1R
-from RAQun.utils.maths import probs, dist
+from raqun.circuits.InnerProduct1R import InnerProduct1R
+from raqun.utils.maths import probs, dist
 
 
 def mmng(params: NDArray[np.floating], eps: float = 0.5) -> List[List[int]]:

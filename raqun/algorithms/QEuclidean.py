@@ -1,6 +1,6 @@
-from RAQun.algorithms.base import Algorithm
-from RAQun.circuits import InnerProduct, InnerProduct1R
-from RAQun.utils.maths import probs
+from raqun.algorithms.base import Algorithm
+from raqun.circuits import InnerProduct, InnerProduct1R
+from raqun.utils.maths import probs
 import numpy as np
 from numpy.typing import NDArray
 from typing import List, Any
@@ -100,7 +100,7 @@ class QEuclidean(Algorithm):
 '''
 if __name__ == '__main__':
     import pandas as pd
-    X = pd.read_csv("/home/elma/Documentos/RAQun/instances.csv")
+    X = pd.read_csv("/home/elma/Documentos/raqun/instances.csv")
     y = X.iloc[:, -1].to_numpy()
     X = X.iloc[:, :-1].to_numpy()
 

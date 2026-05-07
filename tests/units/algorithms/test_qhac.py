@@ -1,8 +1,8 @@
-from RAQun.algorithms import QHAC
+from raqun.algorithms import QHAC
 import numpy as np
 from unittest.mock import patch
 
-@patch('RAQun.algorithms.QHAC.matGen')
+@patch('raqun.algorithms.QHAC.matGen')
 def test_qhac(mock_matGen):
     mock_matGen.return_value = np.array([
         [0.0, 2.0, 2.0, 9.0, 9.0, 9.0],

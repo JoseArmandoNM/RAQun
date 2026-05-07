@@ -1,0 +1,83 @@
+Metadata-Version: 2.4
+Name: raqun
+Version: 0.1.0
+Summary: RAQun is a Python package for comparing ML algorithms
+Author-email: Jose Armando Noguez Martinez <armandonoguez113@gmail.com>
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pennylane>=0.44
+Requires-Dist: scikit-learn>=1.8
+Requires-Dist: numpy>=2.4
+Requires-Dist: pennylane-lightning>=0.44
+Dynamic: license-file
+
+# RAQun 🦝
+
+**RAQun** es un paquete de Python para comparar algoritmos de Aprendizaje Automático Cuántico (QML). Construido sobre [PennyLane](https://pennylane.ai/) y [scikit-learn](https://scikit-learn.org/), proporciona una interfaz unificada e intuitiva para probar, evaluar y comparar varios métodos de agrupamiento (clustering) y clasificación cuántica.
+
+## Características
+
+- **Algoritmos Cuánticos**: 
+  - `QDBSCAN`: Agrupamiento Espacial Basado en Densidad de Aplicaciones con Ruido (Versión Cuántica).
+  - `QEuclidean`: Clasificador basado en distancia Euclidiana Cuántica.
+  - `QHAC`: Agrupamiento Jerárquico Aglomerativo Cuántico.
+  - `QMeans`: Agrupamiento K-Means Cuántico.
+  - `QSC`: Agrupamiento Espectral Cuántico (Quantum Spectral Clustering).
+- **Circuitos Cuánticos**: Componentes esenciales para QML, incluyendo `Eigen`, `InnerProduct`, `InnerProduct1R` y `VQE`.
+- **Compatibilidad con Scikit-learn**: Diseñado para integrarse fácilmente en flujos de trabajo de Machine Learning existentes, con una interfaz muy similar a `scikit-learn`.
+
+## Requisitos
+
+- Python >= 3.10
+- `pennylane` >= 0.44
+- `pennylane-lightning` >= 0.44
+- `scikit-learn` >= 1.8
+- `numpy` >= 2.4
+
+## Instalación
+
+Puedes instalar el paquete directamente desde el código fuente. Clona el repositorio e instálalo usando `pip`:
+
+```bash
+git clone <url-del-repositorio>
+cd RAQun
+pip install .
+```
+
+*Nota: Usa `pip install -e .` si planeas modificar el código fuente del paquete (modo editable).*
+
+## Guía de Inicio Rápido
+
+Aquí tienes un ejemplo rápido de cómo usar `QDBSCAN` con el paquete RAQun:
+
+```python
+import numpy as np
+from raqun.algorithms import QDBSCAN
+
+# Crear algunos datos de prueba
+X = np.array([[1, 2], [1, 4], [1, 0], [10, 2], [10, 4], [10, 0]])
+
+# Inicializar y ajustar (fit) el algoritmo QDBSCAN
+qdbscan = QDBSCAN(eps=1.0, minSamples=2)
+labels = qdbscan.fit(X)
+
+print("Etiquetas de los clústeres:", labels)
+```
+
+## Desarrollo y Pruebas (Testing)
+
+Para ejecutar el conjunto de pruebas y asegurarte de que todo funciona correctamente, puedes usar `pytest`:
+
+```bash
+pip install pytest
+pytest tests/
+```
+
+## Autor
+
+- **José Armando Noguez Martínez** - [armandonoguez113@gmail.com](mailto:armandonoguez113@gmail.com)
+
+## Licencia
+
+Este proyecto está licenciado bajo los términos de la licencia proporcionada en el archivo `LICENSE`.

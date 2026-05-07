@@ -40,7 +40,7 @@ def log_t(num: int) -> tuple[int, int]:
     return num, int(np.ceil(np.log2(num))) if num > 1 else 1
 #end log_t
 
-def dist(probs: NDArray[np.floating], method: str = 'hadamard', vecs: NDArray[np.floating] = np.array([])) -> NDArray[np.floating]:
+def dist(probs: NDArray[np.floating], method: str = 'hadamard', vecs: NDArray[np.floating] = None) -> NDArray[np.floating]:
     """
         Calculates the Euclidean distance between two vectors.
 
@@ -74,8 +74,21 @@ def dist(probs: NDArray[np.floating], method: str = 'hadamard', vecs: NDArray[np
         raise ValueError(f'Method {method} not recognized.')
     
     dists = np.array([], dtype=np.float64)
-    vec = vecs[0]
-    vecs = vecs[1:]
+    if vecs is None:
+        vecs = np.zeros(len(probs))
+        
+    if method == 'swap':
+        if vecs is None or len(vecs) == 0:
+            raise ValueError("vecs must be provided when method is 'swap'")
+        vec = vecs[0]
+        vecs = vecs[1:]
+    else:
+        if vecs is None:
+            vec = np.zeros(len(probs))
+            vecs = np.zeros(len(probs))
+        else:
+            vec = np.zeros(len(probs))
+
     for i in range(len(probs)):
         z = 1 if method == 'hadamard' else vec + vecs[i]
         dists = np.append(dists, 4*z*(1-probs[i]))

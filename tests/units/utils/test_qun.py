@@ -1,9 +1,9 @@
-from RAQun.utils.qun import ctrlGen, padder
+from raqun.utils.qun import ctrlGen, padder
 import numpy as np
 
 def test_ctrlGen():
     res = ctrlGen(3, 2)
-    assert res == ['00', '01', '10']
+    np.testing.assert_array_equal(res, ['00', '01', '10'])
 #end test_ctrlGen
 
 def test_padder():

@@ -1,9 +1,9 @@
-from RAQun.algorithms.base import Algorithm
+from raqun.algorithms.base import Algorithm
 import numpy as np
 from numpy.typing import NDArray
 from typing import cast, List
-from RAQun.circuits import InnerProduct, InnerProduct1R
-from RAQun.utils.graph import mmng, matGen
+from raqun.circuits import InnerProduct, InnerProduct1R
+from raqun.utils.graph import mmng, matGen
 from collections import deque
 
 class QDBSCAN(Algorithm):
@@ -109,7 +109,7 @@ class QDBSCAN(Algorithm):
 '''
 if __name__ == '__main__':
     import pandas as pd
-    X = pd.read_csv("/home/elma/Documentos/RAQun/instances.csv")
+    X = pd.read_csv("/home/elma/Documentos/raqun/instances.csv")
     X = X[:-1]
 
 

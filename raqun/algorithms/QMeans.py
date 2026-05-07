@@ -1,5 +1,5 @@
-from RAQun.algorithms.base import Algorithm
-from RAQun.algorithms.QEuclidean import QEuclidean
+from raqun.algorithms.base import Algorithm
+from raqun.algorithms.QEuclidean import QEuclidean
 import numpy as np
 from numpy.typing import NDArray
 from typing import List, Any
@@ -80,7 +80,7 @@ class QMeans(Algorithm):
 '''
 if __name__ == '__main__':
     import pandas as pd
-    X = pd.read_csv("/home/elma/Documentos/RAQun/dataPrueba.csv")
+    X = pd.read_csv("/home/elma/Documentos/raqun/dataPrueba.csv")
     X = X.drop(columns=['id', 'label']).values
     qmeans = QMeans(k=2)
     labels = qmeans.fit(X)

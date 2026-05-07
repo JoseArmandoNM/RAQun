@@ -1,9 +1,9 @@
-from RAQun.algorithms.base import Algorithm
+from raqun.algorithms.base import Algorithm
 import numpy as np
 from numpy.typing import NDArray
-from RAQun.utils import mmng, inMat, matGen
-from RAQun.circuits import Eigen, VQE
-from RAQun.algorithms.QMeans import QMeans
+from raqun.utils import mmng, inMat, matGen
+from raqun.circuits import Eigen, VQE
+from raqun.algorithms.QMeans import QMeans
 import pandas as pd
 from typing import List, cast
 from pathlib import Path

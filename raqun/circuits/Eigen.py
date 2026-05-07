@@ -1,10 +1,10 @@
-from RAQun.circuits import Circuit
+from raqun.circuits import Circuit
 from typing import Dict, Any, List
 import pennylane as qml
 from pennylane import numpy as np
 from numpy.typing import NDArray
-from RAQun.utils.maths import log_t, probs
-from RAQun.utils.qun import ctrlGen, padder
+from raqun.utils.maths import log_t, probs
+from raqun.utils.qun import ctrlGen, padder
 
 class Eigen(Circuit):
     """

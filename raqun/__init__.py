@@ -1,6 +1,6 @@
-from RAQun.algorithms import *
-from RAQun.circuits import *
-from RAQun.utils import *
+from raqun.algorithms import *
+from raqun.circuits import *
+from raqun.utils import *
 
 __all__ = [
     "Algorithm",

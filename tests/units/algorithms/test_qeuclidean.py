@@ -1,9 +1,9 @@
-from RAQun.algorithms import QEuclidean
+from raqun.algorithms import QEuclidean
 import numpy as np
 from unittest.mock import patch
 
-@patch('RAQun.algorithms.QEuclidean.InnerProduct1R')
-@patch('RAQun.algorithms.QEuclidean.probs')
+@patch('raqun.algorithms.QEuclidean.InnerProduct1R')
+@patch('raqun.algorithms.QEuclidean.probs')
 def test_qeuclidean(mock_probs, mock_InnerProduct1R):
     model = QEuclidean(metric="hadamard")
     

@@ -1,4 +1,4 @@
-from RAQun.utils.maths import log_2, log_t, dist, probs
+from raqun.utils.maths import log_2, log_t, dist, probs
 import numpy as np
 import pytest
 

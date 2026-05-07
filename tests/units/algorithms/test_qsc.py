@@ -1,9 +1,9 @@
-from RAQun.algorithms import QSC
+from raqun.algorithms import QSC
 import numpy as np
 from unittest.mock import patch, MagicMock
 
-@patch('RAQun.algorithms.QSC.QMeans')
-@patch('RAQun.algorithms.QSC.matGen')
+@patch('raqun.algorithms.QSC.QMeans')
+@patch('raqun.algorithms.QSC.matGen')
 def test_qsc(mock_matGen, mock_QMeans_class):
     mock_matGen.return_value = np.array([
         [1.0, 0.8, 0.8, 0.1, 0.1, 0.1],

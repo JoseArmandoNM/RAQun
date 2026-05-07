@@ -1,4 +1,4 @@
-from RAQun.utils.graph import mmng, inMat, matGen
+from raqun.utils.graph import mmng, inMat, matGen
 import numpy as np
 from unittest.mock import patch
 
@@ -21,8 +21,8 @@ def test_inMat():
     np.testing.assert_array_equal(res, expected)
 #end test_inMat
 
-@patch('RAQun.utils.graph.InnerProduct1R')
-@patch('RAQun.utils.graph.probs')
+@patch('raqun.utils.graph.InnerProduct1R')
+@patch('raqun.utils.graph.probs')
 def test_matGen(mock_probs, mock_InnerProduct1R):
     mock_circuit = mock_InnerProduct1R.return_value
     mock_circuit.qnode.return_value = {'00': 1}

@@ -1,8 +1,8 @@
-from RAQun.algorithms import QMeans
+from raqun.algorithms import QMeans
 import numpy as np
 from unittest.mock import patch
 
-@patch('RAQun.algorithms.QMeans.QEuclidean.predict')
+@patch('raqun.algorithms.QMeans.QEuclidean.predict')
 def test_qmeans(mock_predict):
     mock_predict.side_effect = lambda x: 0 if x[0] < 5 else 1
     

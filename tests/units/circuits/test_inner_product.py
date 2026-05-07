@@ -1,4 +1,4 @@
-from RAQun.circuits.InnerProduct import InnerProduct
+from raqun.circuits.InnerProduct import InnerProduct
 import pandas as pd
 import numpy as np
 import pytest

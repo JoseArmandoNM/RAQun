@@ -3,7 +3,7 @@ import numpy as np
 from unittest.mock import patch, MagicMock
 import pennylane as qml
 
-from RAQun.circuits import Eigen
+from raqun.circuits import Eigen
 
 @pytest.fixture
 def sampleMatrix():

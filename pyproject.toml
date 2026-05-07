@@ -1,5 +1,5 @@
 [project]
-name = "RAQun"
+name = "raqun"
 version = "0.1.0"
 description = "RAQun is a Python package for comparing ML algorithms"
 authors = [
