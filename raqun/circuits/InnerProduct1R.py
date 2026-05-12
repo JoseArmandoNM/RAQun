@@ -43,7 +43,9 @@ class InnerProduct1R(Circuit):
             "lightning.qubit", 
             wires=self.logK + self.logD + 2
         )
-        self.qnode = qml.QNode(self.run, self.dev, shots=1024)
+        # Increase shots proportionally to the number of vectors to ensure
+        # each state gets enough shots for an accurate probability estimation
+        self.qnode = qml.QNode(self.run, self.dev, shots=1024 * self.vecs.shape[0])
         
         self.regJ = [i for i in range(self.logK)]
         self.regI = [i for i in range(self.logK, self.logK + self.logD)]
