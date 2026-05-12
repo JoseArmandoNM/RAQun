@@ -12,8 +12,8 @@ def mmng(params: NDArray[np.floating], eps: float = 0.5) -> List[List[int]]:
 
         Parameters
         ----------
-        params : list[list[int]]
-            Matrix of shape (nSamples, nFeatures) with the data.
+        params : NDArray[np.floating]
+            Matrix of shape (nSamples, nSamples) with the distances.
         eps : float
             Maximum distance between two samples for one to be considered as in the neighborhood of the other.
             Its default value is 0.5.
