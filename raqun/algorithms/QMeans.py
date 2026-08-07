@@ -16,7 +16,7 @@ class QMeans(Algorithm):
             Maximum number of iterations.
     """
     
-    def __init__(self, k: int, maxIters: int = 50, metric: str = 'hadamard') -> None:
+    def __init__(self, k: int, maxIters: int = 50, metric: str = 'hadamard', shots: int | None = None) -> None:
         """
             Initializes the class variables.
 
@@ -29,14 +29,19 @@ class QMeans(Algorithm):
             metric : str
                 Metric to use for the quantum circuit.
                 Options: 'hadamard' or 'swap'.
+            shots : int | None
+                Number of measurement shots for quantum circuits.
         """
 
         self.k: int = k
         self.maxIters: int = maxIters
         self.history: List[NDArray[np.floating]] = [] 
         self.metric = metric.lower()
-        if self.metric not in ['hadamard', 'quantum']:
-            raise ValueError(f'Metric {metric} not recognized.')
+        if self.metric == 'quantum':
+            self.metric = 'swap'
+        if self.metric not in ['hadamard', 'swap']:
+            raise ValueError(f'Metric {metric} not recognized. Use "hadamard" or "swap".')
+        self.shots = shots
     #end __init__
 
     def fit(self, X: NDArray[np.floating]) -> NDArray[np.floating]:
@@ -57,7 +62,7 @@ class QMeans(Algorithm):
         current_labels: NDArray[np.floating] = np.array(np.random.choice(self.k, size=n), dtype=np.float64)
         
         for i in range(self.maxIters):
-            classifier: QEuclidean = QEuclidean(self.metric)
+            classifier: QEuclidean = QEuclidean(self.metric, shots=self.shots)
             classifier.fit(X, current_labels)
             newLabels: NDArray[np.floating] = np.empty(n)
             changes: int = 0

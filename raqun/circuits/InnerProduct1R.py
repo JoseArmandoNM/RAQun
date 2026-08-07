@@ -18,7 +18,7 @@ class InnerProduct1R(Circuit):
             Matrix of shape (nSamples, nFeatures) with the data.
     """
     
-    def __init__(self, vec: NDArray[np.floating], vecs: NDArray[np.floating]) -> None:
+    def __init__(self, vec: NDArray[np.floating], vecs: NDArray[np.floating], shots: int | None = None) -> None:
         """
             Initializes the class variables.
 
@@ -28,6 +28,8 @@ class InnerProduct1R(Circuit):
                 Vector of shape (nFeatures,).
             vecs : NDArray[np.floating]
                 Matrix of shape (nSamples, nFeatures) with the data.
+            shots : int | None
+                Number of measurement shots. If None, defaults to 1024 * len(vecs).
         """
         self.vec = vec
         self.vecs = vecs
@@ -43,9 +45,8 @@ class InnerProduct1R(Circuit):
             "lightning.qubit", 
             wires=self.logK + self.logD + 2
         )
-        # Increase shots proportionally to the number of vectors to ensure
-        # each state gets enough shots for an accurate probability estimation
-        self.qnode = qml.QNode(self.run, self.dev, shots=1024 * self.vecs.shape[0])
+        self.shots = shots if shots is not None else 1024 * self.vecs.shape[0]
+        self.qnode = qml.QNode(self.run, self.dev, shots=self.shots)
         
         self.regJ = [i for i in range(self.logK)]
         self.regI = [i for i in range(self.logK, self.logK + self.logD)]

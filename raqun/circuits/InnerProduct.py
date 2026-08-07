@@ -18,7 +18,7 @@ class InnerProduct(Circuit):
             Matrix of shape (nSamples, nFeatures) with the data.
     """
 
-    def __init__(self, vec: NDArray[np.floating], vecs: NDArray[np.floating]) -> None:
+    def __init__(self, vec: NDArray[np.floating], vecs: NDArray[np.floating], shots: int | None = None) -> None:
         """
             Initializes the class variables.
 
@@ -28,10 +28,11 @@ class InnerProduct(Circuit):
                 Vector of shape (nFeatures,).
             vecs : NDArray[np.floating]
                 Matrix of shape (nSamples, nFeatures) with the data.
+            shots : int | None
+                Number of measurement shots. If None, defaults to 10024.
         """
         self.vec = vec
         self.vecs = vecs
-        
         
         self.logC = int(np.ceil(np.log2(self.vecs.shape[0])))
         self.d, self.logD = log_t(self.vecs.shape[1])
@@ -42,7 +43,8 @@ class InnerProduct(Circuit):
             "lightning.qubit", 
             wires=self.logC + 2 * self.logD + 1
         )
-        self.qnode = qml.QNode(self.run, self.dev, shots=10024)
+        self.shots = shots if shots is not None else 10024
+        self.qnode = qml.QNode(self.run, self.dev, shots=self.shots)
         
         self.regJ = [i for i in range(self.logC)]
         self.regU = [i for i in range(

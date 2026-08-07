@@ -16,7 +16,7 @@ class QEuclidean(Algorithm):
             Options are 'hadamard' or 'swap'.
     """
 
-    def __init__(self, metric: str = "hadamard") -> None:
+    def __init__(self, metric: str = "hadamard", shots: int | None = None) -> None:
         """
             Initializes the class variables.
 
@@ -25,11 +25,14 @@ class QEuclidean(Algorithm):
             metric : str
                 Metric to use for the quantum circuit.
                 Options are 'hadamard' or 'swap'.
+            shots : int | None
+                Number of measurement shots.
         """
 
         self.metric = metric.lower()
         if self.metric != "hadamard" and self.metric != "swap":
             raise ValueError("Metric not supported. Use 'hadamard' or 'swap'.")
+        self.shots = shots
     #end __init__
 
     def fit(self, X: NDArray[np.floating], y: NDArray[np.floating]) -> Any: # type: ignore[override]
@@ -79,7 +82,7 @@ class QEuclidean(Algorithm):
             NDArray[np.floating]
                 Array of shape (nSamples,) with predicted class for each sample.
         """
-        self.circuit = InnerProduct1R(vec, self.centroids) if self.metric == "hadamard" else InnerProduct(vec, self.centroids)
+        self.circuit = InnerProduct1R(vec, self.centroids, shots=self.shots) if self.metric == "hadamard" else InnerProduct(vec, self.centroids, shots=self.shots)
         
         probsVec = probs(self.circuit.qnode(), self.centroids.shape[0])
         
