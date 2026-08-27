@@ -43,7 +43,7 @@ class InnerProduct(Circuit):
             "lightning.qubit", 
             wires=self.logC + 2 * self.logD + 1
         )
-        self.shots = shots if shots is not None else 10024
+        self.shots = shots if shots is not None else 8192
         self.qnode = qml.QNode(self.run, self.dev, shots=self.shots)
         
         self.regJ = [i for i in range(self.logC)]
@@ -77,7 +77,11 @@ class InnerProduct(Circuit):
         """
 
         vec = np.pad(vec, (0, 2**self.logD - vec.size), mode='constant')
-        vec = vec / np.linalg.norm(vec)
+        norm = np.linalg.norm(vec)
+        if norm < 1e-12 or np.isnan(norm):
+            vec = np.ones_like(vec) / np.sqrt(vec.size)
+        else:
+            vec = vec / norm
         return vec
     #end normalize
 

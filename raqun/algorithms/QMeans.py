@@ -60,6 +60,8 @@ class QMeans(Algorithm):
         """
         n = X.shape[0]
         current_labels: NDArray[np.floating] = np.array(np.random.choice(self.k, size=n), dtype=np.float64)
+        for j in range(min(self.k, n)):
+            current_labels[j] = float(j)
         
         for i in range(self.maxIters):
             classifier: QEuclidean = QEuclidean(self.metric, shots=self.shots)

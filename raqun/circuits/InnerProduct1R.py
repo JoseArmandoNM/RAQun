@@ -33,8 +33,7 @@ class InnerProduct1R(Circuit):
         """
         self.vec = vec
         self.vecs = vecs
-        
-        self.logK = int(np.ceil(np.log2(self.vecs.shape[0])))
+        self.logK = int(np.ceil(np.log2(self.vecs.shape[0]))) if self.vecs.shape[0] > 1 else 1
         self.n, self.logN = log_t(self.vecs.shape[0])
         self.d, self.logD = log_t(self.vecs.shape[1])
         
@@ -45,7 +44,7 @@ class InnerProduct1R(Circuit):
             "lightning.qubit", 
             wires=self.logK + self.logD + 2
         )
-        self.shots = shots if shots is not None else 1024 * self.vecs.shape[0]
+        self.shots = shots if shots is not None else 8192
         self.qnode = qml.QNode(self.run, self.dev, shots=self.shots)
         
         self.regJ = [i for i in range(self.logK)]

@@ -17,7 +17,7 @@ class QHAC(Algorithm):
             Type of the parameters, must be 'data' or 'similarity'.
     """
     
-    def __init__(self, k: int = 2, paramType: str = 'data') -> None:
+    def __init__(self, k: int = 2, paramType: str = 'data', metric: str = 'hadamard', shots: int = 8192) -> None:
         """
             Initializes the class variables.
 
@@ -27,9 +27,15 @@ class QHAC(Algorithm):
                 Number of clusters.
             paramType : str
                 Type of the parameters, must be 'data' or 'similarity'.
+            metric : str
+                Quantum distance metric ('hadamard' or 'swap').
+            shots : int
+                Number of measurement shots.
         """
         self.paramType = paramType
         self.k = k
+        self.metric = metric
+        self.shots = shots
         if self.paramType != "data" and self.paramType != "similarity":
             raise ValueError("paramType must be 'data' or 'similarity'")
     #end __init__

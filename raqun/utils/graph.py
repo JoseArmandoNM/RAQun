@@ -2,6 +2,7 @@ from typing import Tuple, List, Dict, Any
 import numpy as np
 from numpy.typing import NDArray
 
+from raqun.circuits.InnerProduct import InnerProduct
 from raqun.circuits.InnerProduct1R import InnerProduct1R
 from raqun.utils.maths import probs, dist
 
@@ -68,7 +69,7 @@ def inMat(graph: List[List[int]]) -> NDArray[np.floating]:
     return inMatrix
 #end inMat
 
-def matGen(X: NDArray[np.floating]) -> NDArray[np.floating]:
+def matGen(X: NDArray[np.floating], metric: str = 'hadamard', shots: int = 8192) -> NDArray[np.floating]:
     """
         Generates a disimilarity matrix with probabilities got from the inner product of the vectors.
 
@@ -76,6 +77,10 @@ def matGen(X: NDArray[np.floating]) -> NDArray[np.floating]:
         ----------
         X : NDArray[np.floating]
             Data matrix of shape (nSamples, nFeatures).
+        metric : str
+            Quantum distance metric ('hadamard' or 'swap').
+        shots : int
+            Number of measurement shots (default: 8192).
 
         Returns
         -------
@@ -89,7 +94,11 @@ def matGen(X: NDArray[np.floating]) -> NDArray[np.floating]:
     norms2: NDArray[np.floating] = np.array([np.linalg.norm(x)**2 for x in X])
 
     for i, rec in enumerate(X):
-        circuit = InnerProduct1R(rec, X)
+        if metric.lower() == 'swap':
+            circuit = InnerProduct(rec, X, shots=shots)
+        else:
+            circuit = InnerProduct1R(rec, X, shots=shots)
+            
         counts: Dict[str, Any] = circuit.qnode()
         p_vec: NDArray[Any] = probs(counts, N)
         

@@ -35,7 +35,7 @@ class Eigen(Circuit):
             for j in range(self.X.shape[0]):
                 if self.X[i][j] == 0:
                     self.X[i][j] = 1e-10
-        self.shots = 1024
+        self.shots = 8192
         self.n, self.logN = log_t(X.shape[0])
         self.m, self.logM = log_t(500)
         self.Q = ctrlGen(self.n, self.logN)

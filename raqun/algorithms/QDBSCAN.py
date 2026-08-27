@@ -18,7 +18,7 @@ class QDBSCAN(Algorithm):
             The number of samples (or total weight) in a neighborhood for a point to be considered as a core point.
     """
     
-    def __init__(self, eps: float, minSamples: int) -> None:
+    def __init__(self, eps: float, minSamples: int, metric: str = 'hadamard', shots: int = 8192) -> None:
         """
             Initializes the class variables.
 
@@ -28,10 +28,16 @@ class QDBSCAN(Algorithm):
                 The maximum distance between two samples for one to be considered as in the neighborhood of the other.
             minSamples : int
                 The number of samples (or total weight) in a neighborhood for a point to be considered as a core point.
+            metric : str
+                Quantum distance metric ('hadamard' or 'swap').
+            shots : int
+                Number of measurement shots.
         """
 
         self.eps = eps
         self.minSamples = minSamples
+        self.metric = metric
+        self.shots = shots
     #end __init__
 
     def fit(self, params: NDArray[np.floating], paramsType: str = 'data') -> NDArray[np.floating]:

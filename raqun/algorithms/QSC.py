@@ -20,7 +20,7 @@ class QSC(Algorithm):
             The maximum distance between two samples for one to be considered as in the neighborhood of the other.
     """
     
-    def __init__(self, k: int, eps: float, paramType: str = 'data', eigen: str = 'classical') -> None:
+    def __init__(self, k: int, eps: float, paramType: str = 'data', eigen: str = 'classical', maxIters: int = 50, metric: str = 'hadamard', shots: int | None = None) -> None:
         """
             Initializes the class variables.
 
@@ -36,10 +36,19 @@ class QSC(Algorithm):
             eigen : str
                 Method to calculate the Eigenvectors.
                 Options: 'classical', 'qpe', 'vqe'.
+            maxIters : int
+                Maximum iterations for the embedded QMeans.
+            metric : str
+                Quantum distance metric ('hadamard' or 'swap').
+            shots : int | None
+                Number of measurement shots.
         """
 
         self.k = k
         self.eps = eps
+        self.maxIters = maxIters
+        self.metric = metric
+        self.shots = shots
         paramOptions: List[str] = ['data', 'mmng', 'similarity', 'inMatrix']
         if paramType not in paramOptions:
             raise ValueError(f"paramType must be one of {paramOptions}")
@@ -103,8 +112,8 @@ class QSC(Algorithm):
             NDArray[np.floating]
                 Array of shape (nSamples,) with cluster labels.
         """
-        qmeans = QMeans(self.k, 35)
-        return qmeans.fit(self.projection(X))
+        self.qmeans = QMeans(self.k, maxIters=self.maxIters, metric=self.metric, shots=self.shots)
+        return self.qmeans.fit(self.projection(X))
     #end fit
 #end QSC
 
